@@ -13,32 +13,74 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Native">
+      <UniqueIdentifier>{aa790797-cfa9-40af-8463-b9691c31110d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Auto">
+      <UniqueIdentifier>{204157e0-0104-4806-b572-778f35f52c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DirectXTex">
+      <UniqueIdentifier>{3f0c1f87-a120-4588-a0fd-ffee618efee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Auto">
+      <UniqueIdentifier>{7add3de2-95d0-45b3-b360-876d94afa6d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Wrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="DirectXTexSharpLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ManagedObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DirectXTex.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Native</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files\Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files\Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSFLAGS.h">
+      <Filter>Header Files\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="TEX_DIMENSION.h">
+      <Filter>Header Files\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="TEX_FILTER_FLAGS.h">
+      <Filter>Header Files\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="TexMetadata.h">
+      <Filter>Header Files\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Header Files\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="ScratchImage.h">
+      <Filter>Header Files\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="DXGI_FORMAT.h">
+      <Filter>Header Files\DirectXTex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Wrapper.cpp">
+    <ClCompile Include="DirectXTexSharpLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssemblyInfo.cpp">
+    <ClCompile Include="TexMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>Source Files\Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="AssemblyInfo.cpp">
+      <Filter>Source Files\Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScratchImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectXTex.inl">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Native</Filter>
     </None>
   </ItemGroup>
 </Project>

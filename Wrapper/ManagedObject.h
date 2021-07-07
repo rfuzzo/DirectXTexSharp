@@ -1,6 +1,6 @@
 //ManagedObject.h
 #pragma once
-using namespace System;
+
 namespace CLI {
 
     template<class T>
@@ -13,6 +13,7 @@ namespace CLI {
             : m_Instance(instance)
         {
         }
+		
         virtual ~ManagedObject()
         {
             if (m_Instance != nullptr)
@@ -31,9 +32,6 @@ namespace CLI {
         {
             return m_Instance;
         }
-    	
-       
-        
     };
 
     
