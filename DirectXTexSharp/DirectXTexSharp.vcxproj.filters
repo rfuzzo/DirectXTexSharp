@@ -42,15 +42,6 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files\Auto</Filter>
     </ClInclude>
-    <ClInclude Include="DDSFLAGS.h">
-      <Filter>Header Files\DirectXTex</Filter>
-    </ClInclude>
-    <ClInclude Include="TEX_DIMENSION.h">
-      <Filter>Header Files\DirectXTex</Filter>
-    </ClInclude>
-    <ClInclude Include="TEX_FILTER_FLAGS.h">
-      <Filter>Header Files\DirectXTex</Filter>
-    </ClInclude>
     <ClInclude Include="TexMetadata.h">
       <Filter>Header Files\DirectXTex</Filter>
     </ClInclude>
@@ -61,6 +52,9 @@
       <Filter>Header Files\DirectXTex</Filter>
     </ClInclude>
     <ClInclude Include="DXGI_FORMAT.h">
+      <Filter>Header Files\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXTexEnums.h">
       <Filter>Header Files\DirectXTex</Filter>
     </ClInclude>
   </ItemGroup>
@@ -81,6 +75,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScratchImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Metadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Conversion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

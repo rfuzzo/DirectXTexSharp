@@ -124,8 +124,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DDSFLAGS.h" />
     <ClInclude Include="DirectXTex.h" />
+    <ClInclude Include="DirectXTexEnums.h" />
     <ClInclude Include="DXGI_FORMAT.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ManagedObject.h" />
@@ -133,13 +133,14 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScratchImage.h" />
     <ClInclude Include="TexMetadata.h" />
-    <ClInclude Include="TEX_DIMENSION.h" />
-    <ClInclude Include="TEX_FILTER_FLAGS.h" />
     <ClInclude Include="DirectXTexSharpLib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="IO.cpp" />
+    <ClCompile Include="Metadata.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

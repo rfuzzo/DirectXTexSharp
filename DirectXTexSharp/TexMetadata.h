@@ -1,9 +1,9 @@
 #pragma once
 
 #include "DirectXTex.h"
+#include "DirectXTexEnums.h"
 #include "DXGI_FORMAT.h"
 #include "ManagedObject.h"
-#include "TEX_DIMENSION.h"
 
 namespace DirectXTexSharp {
 
