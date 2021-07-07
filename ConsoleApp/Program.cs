@@ -37,6 +37,7 @@ namespace ConsoleApp
                 using (var scratchImage = new ScratchImage())
                 {
                     // load dds
+
                     DirectXTexSharpLib.LoadFromDDSMemory(
                         inputAddress,
                         inputBytes.Length,
@@ -57,15 +58,6 @@ namespace ConsoleApp
                             );
 
                         var uncompressedImage = newscratchImage.GetImages();
-
-                        //var result_conversion = DirectXTexSharpLib.Convert(
-                        //    uncompressedImage,
-                        //    format,
-                        //    TEX_FILTER_FLAGS.TEX_FILTER_DEFAULT,
-                        //    0,
-                        //    newscratchImage);
-
-                        //var newImage = newscratchImage.GetImages();
                         var newImageMD = newscratchImage.GetMetadata();
 
                         // save to tga
@@ -76,17 +68,11 @@ namespace ConsoleApp
                             newPath,
                             newImageMD
                         );
+
+                        return result_save;
                     }
-
-
-                    
-
-                    
-                        
                 }
             }
-
-            return 1;
         }
 
         private static TexMetadata TestGetMetadataFromDDSFile(string ddsPath)

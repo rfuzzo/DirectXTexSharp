@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wrapper\Wrapper.vcxproj" />
+    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp.vcxproj" />
   </ItemGroup>
 
 </Project>
