@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <Description>A .NET wrapper for DirectXTex</Description>
+	  <Authors>Moritz Baron</Authors>
+	  <PackageProjectUrl>https://github.com/rfuzzo/DirectXTexSharp</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/rfuzzo/DirectXTexSharp</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	  <TargetFramework>net5.0</TargetFramework>
+	  <Version>0.3.0</Version>
+	  <PackageOutputPath>./nupkg</PackageOutputPath>
+	  <DebugType>embedded</DebugType>
+	  <PublishSingleFile>false</PublishSingleFile>
+	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+	  <Platforms>x86;x64</Platforms>
+	  <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);GetMyPackageFiles</TargetsForTfmSpecificBuildOutput>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DirectXTex.Net.Core\DirectXTex.Net.Core.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp.vcxproj" PrivateAssets="all" />
+	</ItemGroup>
+
+  <Target Name="GetMyPackageFiles">
+		<ItemGroup>
+			<BuildOutputInPackage Include="$(OutputPath)\DirectXTexSharp.dll"/>
+			<BuildOutputInPackage Include="$(OutputPath)\DirectXTex.Net.Core.dll"/>
+		</ItemGroup>
+	</Target>
+
+ 
+
+</Project>
