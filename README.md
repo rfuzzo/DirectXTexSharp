@@ -7,26 +7,26 @@ All stable and some pre-release packages are available on NuGet.
 
 You can use the following command in the Package Manager Console:
 ```ps
-Install-Package DirectXTexNet
+Install-Package DirectXTexSharp
 ```
 
 | Package | NuGet Stable | NuGet Pre-release | Downloads |
 | ------- | ------------ | ----------------- | --------- |
-| [DirectXTexNet](https://www.nuget.org/packages/DirectXTexNet/) | [![DirectXTexNet](https://img.shields.io/nuget/v/DirectXTexNet.svg)](https://www.nuget.org/packages/DirectXTexNet/) | [![DirectXTexNet](https://img.shields.io/nuget/vpre/DirectXTexNet.svg)](https://www.nuget.org/packages/DirectXTexNet/) | [![DirectXTexNet](https://img.shields.io/nuget/dt/DirectXTexNet.svg)](https://www.nuget.org/packages/DirectXTexNet/) |
+| [DirectXTexSharp](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/v/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/vpre/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/dt/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) |
 
 ## Usage
 ```
-using DirectXTexNet;
+using DirectXTexSharp;
 
 
 [TestMethod]
 public void TestGetMetadataFromDDSFile()
 {
-    using (var metadata = new DirectXTexNet.TexMetadata())
+    using (var metadata = new DirectXTexSharp.TexMetadata())
     {
-        var flags = DirectXTexNet.DDSFLAGS.DDS_FLAGS_NONE;
+        var flags = DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE;
 
-        var r = DirectXTexNet.Metadata.GetMetadataFromDDSFile(ddsPath, flags, metadata);
+        var r = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(ddsPath, flags, metadata);
 
         Assert.AreEqual(0, r);
     }
