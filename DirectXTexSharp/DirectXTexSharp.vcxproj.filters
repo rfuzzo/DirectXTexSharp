@@ -22,9 +22,6 @@
     <Filter Include="Header Files\DirectXTexSharp">
       <UniqueIdentifier>{3f0c1f87-a120-4588-a0fd-ffee618efee6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\DirectXTex">
-      <UniqueIdentifier>{aa790797-cfa9-40af-8463-b9691c31110d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectXTexSharpLib.h">
@@ -32,9 +29,6 @@
     </ClInclude>
     <ClInclude Include="ManagedObject.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTex.h">
-      <Filter>Header Files\DirectXTex</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files\Auto</Filter>
@@ -93,10 +87,5 @@
     <Image Include="app.ico">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DirectXTex.inl">
-      <Filter>Header Files\DirectXTex</Filter>
-    </None>
   </ItemGroup>
 </Project>

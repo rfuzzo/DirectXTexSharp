@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>DirectXTEx.Net.$Platform$</id>
+    <id>DirectXTexSharp.$CPlatform$</id>
     <version>$version$</version>
     <authors>Moritz Baron</authors>
     <license type="expression">MIT</license>
@@ -9,8 +9,11 @@
     <projectUrl>https://github.com/rfuzzo/DirectXTexSharp</projectUrl>
     <description>A .NET wrapper for DirectXTex</description>
     <repository type="git" url="https://github.com/rfuzzo/DirectXTexSharp" />
+    <tags>Native, native</tags>
   </metadata>
+
   <files>
-    <file src=".\bin\Publish\x64publish\DirectXTexSharp.dll" target="CEF\" />
+    <file src="bin\$CPlatform$\$CConfiguration$\*.dll" target="lib" />
   </files>
+
 </package>

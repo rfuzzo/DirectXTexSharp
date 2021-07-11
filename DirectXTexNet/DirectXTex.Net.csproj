@@ -18,7 +18,8 @@
 	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	  <Platforms>x86;x64</Platforms>
 	  <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <GenerateDocumentationFile>false</GenerateDocumentationFile>
+	  <PublishBuildOutput>false</PublishBuildOutput>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -30,13 +31,11 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\DirectXTex.Net.Core\DirectXTex.Net.Core.csproj">
-		  <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-		  <IncludeAssets>DirectXTex.Net.dll</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
 	  </ProjectReference>
 
-		<ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp.vcxproj">
-			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-			<IncludeAssets>DirectXTexSharp.dll</IncludeAssets>
+	  <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp.vcxproj">
+		  <PrivateAssets>all</PrivateAssets>
 		</ProjectReference>
 	</ItemGroup>
 

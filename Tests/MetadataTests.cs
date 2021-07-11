@@ -14,13 +14,11 @@ namespace Tests
         public void TestGetMetadataFromDDSFile()
         {
 
+            DirectXTex.Net.TexConv.Test();
 
+            //var w = s.width;
 
-            //using (var x = new DirectXTex.Net.TexMetadata())
-            //{
-
-            //}
-
+            //s.Dispose();
 
             //using (var metadata = new TexMetadata())
             //{
