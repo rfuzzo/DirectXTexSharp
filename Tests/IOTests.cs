@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
-using DirectXTexNet;
+using DirectXTexSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
