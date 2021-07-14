@@ -14,12 +14,6 @@ namespace Tests
         public void TestGetMetadataFromDDSFile()
         {
 
-            DirectXTex.Net.TexConv.Test();
-
-            //var w = s.width;
-
-            //s.Dispose();
-
             //using (var metadata = new TexMetadata())
             //{
             //    var flags = DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE;
