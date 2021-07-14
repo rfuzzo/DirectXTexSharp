@@ -36,9 +36,25 @@ namespace DirectXTexSharp {
 
 
 	
-    public ref class TexMetadata : CLI::ManagedObject<DirectX::TexMetadata>
-    {	
+    public ref class TexMetadata /*: CLI::ManagedObject<DirectX::TexMetadata>*/
+    {
 		public:
+			TexMetadata();
+			TexMetadata(DirectX::TexMetadata metadata);
+
+			property int width;
+			property int height;
+			property int depth;
+			property int arraySize;
+			property int mipLevels;
+			property UINT32 miscFlags;
+			property UINT32 miscFlags2;
+			property DirectXTexSharp::DXGI_FORMAT_WRAPPED format;
+			property DirectXTexSharp::TEX_DIMENSION dimension;
+
+			DirectX::TexMetadata& ToNative();
+    	
+		/*public:
 			TexMetadata();
 			TexMetadata(DirectX::TexMetadata* metadata);
 
@@ -98,6 +114,6 @@ namespace DirectXTexSharp {
 				DirectXTexSharp::TEX_DIMENSION get() {
 	            return static_cast<DirectXTexSharp::TEX_DIMENSION>(m_Instance->dimension);
 	        }
-        }
+        }*/
     };
 }

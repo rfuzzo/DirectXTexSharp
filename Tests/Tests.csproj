@@ -19,8 +19,8 @@
     <PackageReference Include="coverlet.collector" Version="3.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp.vcxproj" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>

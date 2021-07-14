@@ -1,13 +1,9 @@
-#include "DirectXTex.h"
-
 #include "DirectXTexSharpLib.h"
 
 #include <msclr/marshal.h>
 #include <msclr/marshal_cppstd.h>
 
 #include "DirectXTexEnums.h"
-#include "Image.h"
-#include "ScratchImage.h"
 
 using namespace DirectXTexSharp;
 
@@ -18,32 +14,43 @@ using namespace DirectXTexSharp;
 //	_In_z_ const wchar_t* szFile,
 //	_In_ DDS_FLAGS flags,
 //	_Out_ TexMetadata& metadata) noexcept;
-long DirectXTexSharp::Metadata::GetMetadataFromDDSFile(
+DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSFile(
 	System::String^ szFile,
-	DirectXTexSharp::DDSFLAGS flags,
-	DirectXTexSharp::TexMetadata^ metadata) {
+	DirectXTexSharp::DDSFLAGS flags) {
 
 	auto context = gcnew msclr::interop::marshal_context();
-	const auto result = context->marshal_as<const wchar_t*>(szFile);
+	const auto wchar = context->marshal_as<const wchar_t*>(szFile);
 
-	return DirectX::GetMetadataFromDDSFile(
-		result,
+	DirectX::TexMetadata metadata;
+	const auto result = DirectX::GetMetadataFromDDSFile(
+		wchar,
 		static_cast<DirectX::DDS_FLAGS> (flags),
-		*metadata->GetInstance());
+		metadata);
+	
+	Marshal::ThrowExceptionForHR(result);
+
+	return gcnew DirectXTexSharp::TexMetadata(metadata);
 }
 
 //HRESULT __cdecl GetMetadataFromDDSMemory(
 //	_In_reads_bytes_(size) const void* pSource, _In_ size_t size,
 //	_In_ DDS_FLAGS flags,
 //	_Out_ TexMetadata& metadata) noexcept;
-long DirectXTexSharp::Metadata::GetMetadataFromDDSMemory(
+DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSMemory(
 	IntPtr^ pSource,
 	const int size,
-	DirectXTexSharp::DDSFLAGS flags,
-	DirectXTexSharp::TexMetadata^ metadata) {
-	return DirectX::GetMetadataFromDDSMemory(
+	DirectXTexSharp::DDSFLAGS flags) {
+
+	DirectX::TexMetadata metadata;
+	const auto result = DirectX::GetMetadataFromDDSMemory(
 		static_cast<void*>(*pSource),
 		size,
 		static_cast<DirectX::DDS_FLAGS> (flags),
-		*metadata->GetInstance());
+		metadata);
+
+	Marshal::ThrowExceptionForHR(result);
+
+	return gcnew DirectXTexSharp::TexMetadata(metadata);
+	
+	
 }

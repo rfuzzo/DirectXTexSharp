@@ -1,4 +1,3 @@
-//ManagedObject.h
 #pragma once
 
 namespace CLI {
