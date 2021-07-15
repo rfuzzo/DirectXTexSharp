@@ -23,14 +23,14 @@ DirectXTexSharp::ScratchImage^ DirectXTexSharp::IO::LoadFromDDSMemory(
 	DirectXTexSharp::TexMetadata^ metadata) {
 
 	DirectX::ScratchImage image;
+
+	const auto final_metadata = metadata != nullptr ? metadata->get_instance() : nullptr;
 	
-	/*auto native = &metadata->ToNative();*/
-	auto native = metadata->get_instance();
 	auto result = DirectX::LoadFromDDSMemory(
 		static_cast<void*>(*pSource),
 		size,
 		static_cast<DirectX::DDS_FLAGS> (flags),
-		native,
+		final_metadata,
 		image);
 
 	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
@@ -42,22 +42,19 @@ DirectXTexSharp::ScratchImage^ DirectXTexSharp::IO::LoadFromDDSMemory(
 //HRESULT __cdecl SaveToTGAMemory(_In_ const Image & image,
 //	_In_ TGA_FLAGS flags,
 //	_Out_ Blob & blob, _In_opt_ const TexMetadata * metadata = nullptr) noexcept;
-long DirectXTexSharp::IO::SaveToTGAFile(
-	Image^ image,
+void DirectXTexSharp::IO::SaveToTGAFile(
+	Image^ srcImage,
 	System::String^ szFile,
 	DirectXTexSharp::TexMetadata^ metadata) {
 
-	auto context = gcnew msclr::interop::marshal_context();
-	const auto wchar = context->marshal_as<const wchar_t*>(szFile);
+	msclr::interop::marshal_context context;
 
-	/*auto native = &metadata->ToNative();*/
-	auto native = metadata->get_instance();
-	auto result = DirectX::SaveToTGAFile(
-		*image->get_instance(),
-		wchar,
-		native);
+	const auto final_metadata = metadata != nullptr ? metadata->get_instance() : nullptr;
+	
+	const auto result = DirectX::SaveToTGAFile(
+		*srcImage->get_instance(),
+		context.marshal_as<const wchar_t*>(szFile),
+		final_metadata);
 
 	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
-
-	return 0;
 }

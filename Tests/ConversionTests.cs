@@ -1,5 +1,7 @@
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using DirectXTexSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
@@ -12,47 +14,51 @@ namespace Tests
         [TestMethod]
         public void TestDecompress()
         {
-            //using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
-            //using (var ms = new MemoryStream())
-            //using (var metadata = new TexMetadata())
-            //using (var scratchImage = new ScratchImage())
-            //{
-            //    fs.Seek(0, SeekOrigin.Begin);
-            //    fs.CopyTo(ms);
+            IntPtr inputAddress;
+            int inputBytesLen = 0;
 
-            //    var inputBytes = ms.ToArray();
-            //    var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-            //    var inputAddress = inputHandle.AddrOfPinnedObject();
+            using (var ms = new MemoryStream())
+            {
+                using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
+                {
+                    fs.Seek(0, SeekOrigin.Begin);
+                    fs.CopyTo(ms);
+                }
 
-            //    var flags = DDSFLAGS.DDS_FLAGS_NONE;
+                var inputBytes =  ms.ToArray();
+                var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
+                inputAddress = inputHandle.AddrOfPinnedObject();
+                inputBytesLen = inputBytes.Length;
+            }
 
-            //    // load dds
+            Assert.IsTrue(inputBytesLen > 0);
 
-            //    var resultLoad = DirectXTexSharp.IO.LoadFromDDSMemory(
-            //        inputAddress,
-            //        inputBytes.Length,
-            //        flags,
-            //        metadata,
-            //        scratchImage);
+            var flags = DDSFLAGS.DDS_FLAGS_NONE;
 
-            //    Assert.AreEqual(0, resultLoad);
+            using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
+                inputAddress,
+                inputBytesLen,
+                flags,
+                null))
+            {
+                Assert.IsNotNull(scratchImage);
 
-            //    var sourceImage = scratchImage.GetImages();
+                var sourceImage = scratchImage.GetImages();
 
-            //    // convert to DXGI_FORMAT_R8G8B8A8_UNORM
+                // convert to DXGI_FORMAT_R8G8B8A8_UNORM
 
-            //    var format = DXGI_FORMAT_WRAPPED.DXGI_FORMAT_R8G8B8A8_UNORM;
-            //    using (var newscratchImage = new ScratchImage())
-            //    {
-            //        var r = DirectXTexSharp.Conversion.Decompress(
-            //            sourceImage,
-            //            format,
-            //            newscratchImage
-            //        );
+                var format = DXGI_FORMAT_WRAPPED.DXGI_FORMAT_R8G8B8A8_UNORM;
+                using (var newscratchImage = DirectXTexSharp.Conversion.Decompress(
+                    sourceImage,
+                    format
+                ))
+                {
+                    Assert.IsNotNull(newscratchImage);
 
-            //        Assert.AreEqual(0, r);
-            //    }
-            //}
+
+
+                }
+            }
         }
     }
 }

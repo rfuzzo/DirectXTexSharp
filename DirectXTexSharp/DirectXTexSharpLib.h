@@ -38,7 +38,7 @@ namespace DirectXTexSharp {
 
 
 		
-		static long SaveToTGAFile(
+		static void SaveToTGAFile(
 			DirectXTexSharp::Image^ srcImage,
 			System::String^ szFile,
 			/*[Out]*/ DirectXTexSharp::TexMetadata^ metadata);

@@ -21,38 +21,41 @@ namespace Tests
 
             using (var metadata = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(ddsPath, flags))
             {
-                Console.WriteLine("Before wait");
-                Console.WriteLine($"test: {metadata.width}");
+                //Console.WriteLine("Before wait");
+                //Console.WriteLine($"test: {metadata.width}");
 
-                Thread.Sleep(1000);
+                //Thread.Sleep(1000);
 
-                Console.WriteLine("After wait");
-                Console.WriteLine($"test: {metadata.width}");
+                //Console.WriteLine("After wait");
+                //Console.WriteLine($"test: {metadata.width}");
+
+                Assert.AreEqual(512, metadata.width);
             } 
         }
 
         [TestMethod]
         public void TestGetMetadataFromDDSMemory()
         {
-            //using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
-            //{
-            //    var ms = new MemoryStream();
-            //    fs.Seek(0, SeekOrigin.Begin);
-            //    fs.CopyTo(ms);
+            using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
+            {
+                var ms = new MemoryStream();
+                fs.Seek(0, SeekOrigin.Begin);
+                fs.CopyTo(ms);
 
-            //    var inputBytes = ms.ToArray();
-            //    var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-            //    var inputAddress = inputHandle.AddrOfPinnedObject();
+                var inputBytes = ms.ToArray();
+                var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
+                var inputAddress = inputHandle.AddrOfPinnedObject();
 
-            //    var flags = DDSFLAGS.DDS_FLAGS_NONE;
+                var flags = DDSFLAGS.DDS_FLAGS_NONE;
 
-            //    var r = DirectXTexSharp.Metadata.GetMetadataFromDDSMemory(
-            //        inputAddress,
-            //        inputBytes.Length,
-            //        flags);
-
-            //    Assert.IsNotNull(r);
-            //}
+                using (var metadata = DirectXTexSharp.Metadata.GetMetadataFromDDSMemory(
+                    inputAddress,
+                    inputBytes.Length,
+                    flags))
+                {
+                    Assert.AreEqual(512, metadata.width);
+                } 
+            }
         }
     }
 }

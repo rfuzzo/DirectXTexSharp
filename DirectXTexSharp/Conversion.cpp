@@ -33,8 +33,8 @@ DirectXTexSharp::ScratchImage^ DirectXTexSharp::Conversion::Convert(
 		image);
 
 	Marshal::ThrowExceptionForHR(result);
-	auto x = gcnew DirectXTexSharp::ScratchImage(image);
-	return x;
+
+	return gcnew DirectXTexSharp::ScratchImage(image);
 }
 
 //HRESULT __cdecl Decompress(_In_ const Image& cImage, _In_ DXGI_FORMAT format, _Out_ ScratchImage& image) noexcept;
