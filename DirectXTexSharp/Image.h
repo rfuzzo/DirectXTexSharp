@@ -24,37 +24,37 @@ namespace DirectXTexSharp {
         property int width {
         	public:
         		int get() {
-        			return m_Instance->width;
+        			return m_instance_->width;
         		}
         	}
         property int height {
         	public:
         		int get() {
-        		return m_Instance->height;
+        		return m_instance_->height;
         		}
         	}
         property DirectXTexSharp::DXGI_FORMAT_WRAPPED format {
         	public:
                 DirectXTexSharp::DXGI_FORMAT_WRAPPED get() {
-        		return static_cast<DirectXTexSharp::DXGI_FORMAT_WRAPPED>(m_Instance->format);
+        		return static_cast<DirectXTexSharp::DXGI_FORMAT_WRAPPED>(m_instance_->format);
         		}
         	}
         property int rowPitch {
         	public:
         		int get() {
-        			return m_Instance->rowPitch;
+        			return m_instance_->rowPitch;
         		}
         	}
         property int slicePitch {
         	public:
         		int get() {
-        			return m_Instance->slicePitch;
+        			return m_instance_->slicePitch;
         		}
         	}
         property System::IntPtr pixels {
         	public:
 	        System::IntPtr get() {
-        			return static_cast<System::IntPtr>(*m_Instance->pixels);
+        			return static_cast<System::IntPtr>(*m_instance_->pixels);
         		}
         	}
     };

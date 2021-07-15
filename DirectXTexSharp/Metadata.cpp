@@ -3,7 +3,7 @@
 #include <msclr/marshal.h>
 #include <msclr/marshal_cppstd.h>
 
-#include "DirectXTexEnums.h"
+
 
 using namespace DirectXTexSharp;
 
@@ -26,8 +26,8 @@ DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSFile(
 		wchar,
 		static_cast<DirectX::DDS_FLAGS> (flags),
 		metadata);
-	
-	Marshal::ThrowExceptionForHR(result);
+
+	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
 
 	return gcnew DirectXTexSharp::TexMetadata(metadata);
 }
@@ -37,7 +37,7 @@ DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSFile(
 //	_In_ DDS_FLAGS flags,
 //	_Out_ TexMetadata& metadata) noexcept;
 DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSMemory(
-	IntPtr^ pSource,
+	System::IntPtr^ pSource,
 	const int size,
 	DirectXTexSharp::DDSFLAGS flags) {
 
@@ -48,7 +48,7 @@ DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSMemor
 		static_cast<DirectX::DDS_FLAGS> (flags),
 		metadata);
 
-	Marshal::ThrowExceptionForHR(result);
+	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
 
 	return gcnew DirectXTexSharp::TexMetadata(metadata);
 	

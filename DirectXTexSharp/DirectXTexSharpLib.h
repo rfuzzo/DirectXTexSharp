@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DirectXTexEnums.h"
 #include "DXGI_FORMAT.h"
 #include "Image.h"
 #include "ScratchImage.h"

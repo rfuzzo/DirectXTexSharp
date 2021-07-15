@@ -1,9 +1,9 @@
 #pragma once
 
 #include "DirectXTex.h"
+#include "ManagedObject.h"
 #include "DirectXTexEnums.h"
 #include "DXGI_FORMAT.h"
-#include "ManagedObject.h"
 
 namespace DirectXTexSharp {
 
@@ -36,10 +36,10 @@ namespace DirectXTexSharp {
 
 
 	
-    public ref class TexMetadata /*: CLI::ManagedObject<DirectX::TexMetadata>*/
+    public ref class TexMetadata : CLI::ManagedObject<DirectX::TexMetadata>
     {
 		public:
-			TexMetadata();
+			/*TexMetadata();
 			TexMetadata(DirectX::TexMetadata metadata);
 
 			property int width;
@@ -52,68 +52,68 @@ namespace DirectXTexSharp {
 			property DirectXTexSharp::DXGI_FORMAT_WRAPPED format;
 			property DirectXTexSharp::TEX_DIMENSION dimension;
 
-			DirectX::TexMetadata& ToNative();
+			DirectX::TexMetadata& ToNative();*/
     	
-		/*public:
+		public:
 			TexMetadata();
-			TexMetadata(DirectX::TexMetadata* metadata);
+			TexMetadata(DirectX::TexMetadata& metadata);
 
     	property int width {
     		public:
     		int get() {
-	            return m_Instance->width;
+	            return m_instance_->width;
 	        }
 	    }
 	    property int height {
 			public:
 	        int get() {
-	            return m_Instance->height;
+	            return m_instance_->height;
 	        }
 	        }
 	    property int depth {
 			public:
 	        int get() {
-	            return m_Instance->depth;
+	            return m_instance_->depth;
 	        }
 	        }
 	    property int arraySize {
 			public:
 	        int get() {
-	            return m_Instance->arraySize;
+	            return m_instance_->arraySize;
 	        }
 	        }
 	    property int mipLevels {
 			public:
 	        int get() {
-	            return m_Instance->mipLevels;
+	            return m_instance_->mipLevels;
 	        }
 	        }
 	    property UINT32 miscFlags {
 			public:
 	        UINT32 get() {
-	            return m_Instance->miscFlags;
+	            return m_instance_->miscFlags;
 	        }
 	        }
 	    property UINT32 miscFlags2 {
 			public:
 	        UINT32 get() {
-	            return m_Instance->miscFlags2;
+	            return m_instance_->miscFlags2;
 	        }
 	        }
 	    property DirectXTexSharp::DXGI_FORMAT_WRAPPED format {
 			public:
 				DirectXTexSharp::DXGI_FORMAT_WRAPPED get() {
-	            return static_cast<DirectXTexSharp::DXGI_FORMAT_WRAPPED>(m_Instance->format);
+	            return static_cast<DirectXTexSharp::DXGI_FORMAT_WRAPPED>(m_instance_->format);
 				}
 				void set(DirectXTexSharp::DXGI_FORMAT_WRAPPED value) {
-					m_Instance->format = static_cast<DXGI_FORMAT>(value);
+					m_instance_->format = static_cast<DXGI_FORMAT>(value);
 				}
 	        }
 	    property DirectXTexSharp::TEX_DIMENSION dimension {
 			public:
 				DirectXTexSharp::TEX_DIMENSION get() {
-	            return static_cast<DirectXTexSharp::TEX_DIMENSION>(m_Instance->dimension);
+	            return static_cast<DirectXTexSharp::TEX_DIMENSION>(m_instance_->dimension);
 	        }
-        }*/
+        }
     };
 }

@@ -2,16 +2,16 @@
 
 using namespace DirectXTexSharp;
 
-ScratchImage::ScratchImage() /*: ManagedObject(new DirectX::ScratchImage())*/ {
-
-}
-
-//ScratchImage::ScratchImage(DirectX::ScratchImage image)
-//{
+//ScratchImage::ScratchImage() /*: ManagedObject(new DirectX::ScratchImage())*/ {
 //
-//
-//	
 //}
+
+ScratchImage::ScratchImage(DirectX::ScratchImage& image)
+{
+	
+
+	
+}
 
 
 //

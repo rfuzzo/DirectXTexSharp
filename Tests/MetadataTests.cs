@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using DirectXTexSharp;
 //using DirectXTexSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,31 +17,18 @@ namespace Tests
         [TestMethod]
         public void TestGetMetadataFromDDSFile()
         {
-            //var flags = DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE;
+            var flags = DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE;
 
-            //var r = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(ddsPath, flags);
+            using (var metadata = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(ddsPath, flags))
+            {
+                Console.WriteLine("Before wait");
+                Console.WriteLine($"test: {metadata.width}");
 
+                Thread.Sleep(1000);
 
-            //using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
-            //{
-            //    var ms = new MemoryStream();
-            //    fs.Seek(0, SeekOrigin.Begin);
-            //    fs.CopyTo(ms);
-
-            //    var inputBytes = ms.ToArray();
-            //    var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-            //    var inputAddress = inputHandle.AddrOfPinnedObject();
-
-            //    var flags2 = DDSFLAGS.DDS_FLAGS_NONE;
-
-            //    var r2 = DirectXTexSharp.Metadata.GetMetadataFromDDSMemory(
-            //        inputAddress,
-            //        inputBytes.Length,
-            //        flags);
-
-            //    Assert.IsNotNull(r2);
-            //}
-
+                Console.WriteLine("After wait");
+                Console.WriteLine($"test: {metadata.width}");
+            } 
         }
 
         [TestMethod]

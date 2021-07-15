@@ -4,6 +4,7 @@
 #include <msclr/marshal_cppstd.h>
 
 #include "DirectXTexEnums.h"
+#include "DXGI_FORMAT.h"
 #include "Image.h"
 #include "ScratchImage.h"
 
@@ -25,15 +26,15 @@ DirectXTexSharp::ScratchImage^ DirectXTexSharp::Conversion::Convert(
 
 	DirectX::ScratchImage image;
 	auto result = DirectX::Convert(
-		*srcImage->GetInstance(),
+		*srcImage->get_instance(),
 		static_cast<__dxgiformat_h__::DXGI_FORMAT> (format),
 		static_cast<DirectX::TEX_FILTER_FLAGS> (filter),
 		threshold,
 		image);
 
 	Marshal::ThrowExceptionForHR(result);
-
-	return gcnew DirectXTexSharp::ScratchImage(/*image*/);
+	auto x = gcnew DirectXTexSharp::ScratchImage(image);
+	return x;
 }
 
 //HRESULT __cdecl Decompress(_In_ const Image& cImage, _In_ DXGI_FORMAT format, _Out_ ScratchImage& image) noexcept;
@@ -44,13 +45,13 @@ DirectXTexSharp::ScratchImage^ DirectXTexSharp::Conversion::Decompress(
 
 	DirectX::ScratchImage image;
 	auto result = DirectX::Decompress(
-		*cImage->GetInstance(),
+		*cImage->get_instance(),
 		static_cast<__dxgiformat_h__::DXGI_FORMAT> (format),
 		image	);
 
 	Marshal::ThrowExceptionForHR(result);
 
-	return gcnew DirectXTexSharp::ScratchImage(/*image*/);
+	return gcnew DirectXTexSharp::ScratchImage(image);
 };
 
 
