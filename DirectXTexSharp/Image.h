@@ -19,7 +19,8 @@ namespace DirectXTexSharp {
     public ref class Image : CLI::ManagedObject<DirectX::Image> {
     	public:
     	Image();
-        Image(DirectX::Image* image);
+        //Image(DirectX::Image* image);
+        Image(DirectX::Image& image);
 
         property int width {
         	public:
