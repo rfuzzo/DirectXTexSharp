@@ -1,7 +1,5 @@
 #include "TexMetadata.h"
 
-#include <memory>
-
 using namespace DirectXTexSharp;
 
 TexMetadata::TexMetadata() : ManagedObject(new DirectX::TexMetadata()) {

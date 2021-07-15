@@ -17,13 +17,12 @@ using namespace DirectXTexSharp;
 DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSFile(
 	System::String^ szFile,
 	DirectXTexSharp::DDSFLAGS flags) {
-
-	auto context = gcnew msclr::interop::marshal_context();
-	const auto wchar = context->marshal_as<const wchar_t*>(szFile);
+	
+	msclr::interop::marshal_context context;
 
 	DirectX::TexMetadata metadata;
 	const auto result = DirectX::GetMetadataFromDDSFile(
-		wchar,
+		context.marshal_as<const wchar_t*>(szFile),
 		static_cast<DirectX::DDS_FLAGS> (flags),
 		metadata);
 
