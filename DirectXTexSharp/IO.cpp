@@ -38,6 +38,27 @@ DirectXTexSharp::ScratchImage^ DirectXTexSharp::IO::LoadFromDDSMemory(
 	return gcnew DirectXTexSharp::ScratchImage(image);
 }
 
+DirectXTexSharp::ScratchImage^ DirectXTexSharp::IO::LoadFromDDSMemory(
+	byte* pSource,
+	const int size,
+	DirectXTexSharp::DDSFLAGS flags,
+	DirectXTexSharp::TexMetadata^ metadata) {
+
+	DirectX::ScratchImage image;
+
+	const auto final_metadata = metadata != nullptr ? metadata->get_instance() : nullptr;
+
+	auto result = DirectX::LoadFromDDSMemory(
+		pSource,
+		size,
+		static_cast<DirectX::DDS_FLAGS> (flags),
+		final_metadata,
+		image);
+
+	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
+
+	return gcnew DirectXTexSharp::ScratchImage(image);
+}
 
 //HRESULT __cdecl SaveToTGAMemory(_In_ const Image & image,
 //	_In_ TGA_FLAGS flags,

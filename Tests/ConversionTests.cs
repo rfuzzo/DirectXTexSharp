@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
 using DirectXTexSharp;
@@ -11,54 +12,115 @@ namespace Tests
     {
         const string ddsPath = @"X:\cp77\TEMP\rain_normal.dds";
 
-        [TestMethod]
-        public void TestDecompress()
+
+        public delegate void SpanAction(ReadOnlySpan<byte> vs);
+
+        public void ReadAndProcessFile(string path, SpanAction action)
         {
-            IntPtr inputAddress;
-            int inputBytesLen = 0;
-
-            using (var ms = new MemoryStream())
+            byte[] rentedBuffer = null;
+            try
             {
-                using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
+                int len;
+                var offset = 0;
+
+                using (var stream = File.OpenRead(ddsPath))
                 {
-                    fs.Seek(0, SeekOrigin.Begin);
-                    fs.CopyTo(ms);
+                    len = checked((int)stream.Length);
+                    rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
+
+                    int readBytes;
+                    while (offset < len &&
+                           (readBytes = stream.Read(rentedBuffer, offset, len - offset)) > 0)
+                    {
+                        offset += readBytes;
+                    }
                 }
 
-                var inputBytes =  ms.ToArray();
-                var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-                inputAddress = inputHandle.AddrOfPinnedObject();
-                inputBytesLen = inputBytes.Length;
+                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
+
+                action(span);
             }
-
-            Assert.IsTrue(inputBytesLen > 0);
-
-            var flags = DDSFLAGS.DDS_FLAGS_NONE;
-
-            using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
-                inputAddress,
-                inputBytesLen,
-                flags,
-                null))
+            finally
             {
-                Assert.IsNotNull(scratchImage);
+                if (rentedBuffer is object)
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+            }
+        }
 
-                var sourceImage = scratchImage.GetImages();
 
-                // convert to DXGI_FORMAT_R8G8B8A8_UNORM
+        [TestMethod]
+        public unsafe void TestDecompress()
+        {
+            ReadAndProcessFile(ddsPath, ProcessSpan);
 
-                var format = DXGI_FORMAT_WRAPPED.DXGI_FORMAT_R8G8B8A8_UNORM;
-                using (var newscratchImage = DirectXTexSharp.Conversion.Decompress(
-                    sourceImage,
-                    format
-                ))
+            void ProcessSpan(ReadOnlySpan<byte> span)
+            {
+                // get pointer to span in memory
+                //fixed (byte* ptr = &MemoryMarshal.GetReference(buffer))
+                fixed (byte* ptr = span)
                 {
-                    Assert.IsNotNull(newscratchImage);
+                    var flags = DDSFLAGS.DDS_FLAGS_NONE;
+
+                    using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
+                        ptr,
+                        span.Length,
+                        flags,
+                        null))
+                    {
+                        Assert.IsNotNull(scratchImage);
+
+                        var sourceImage = scratchImage.GetImages();
+
+                        // convert to DXGI_FORMAT_R8G8B8A8_UNORM
+
+                        var format = DXGI_FORMAT_WRAPPED.DXGI_FORMAT_R8G8B8A8_UNORM;
+                        using (var newscratchImage = DirectXTexSharp.Conversion.Decompress(
+                            sourceImage,
+                            format
+                        ))
+                        {
+                            Assert.IsNotNull(newscratchImage);
 
 
 
+                        }
+                    }
                 }
             }
+            
+        }
+
+        [TestMethod]
+        [DataRow(ESaveFileTypes.TGA)]
+        [DataRow(ESaveFileTypes.PNG)]
+        [DataRow(ESaveFileTypes.JPEG)]
+        [DataRow(ESaveFileTypes.HDR)]
+        [DataRow(ESaveFileTypes.BMP)]
+        [DataRow(ESaveFileTypes.TIFF)]
+        public unsafe void TestConvertDdsFile(ESaveFileTypes filetype)
+        {
+            ReadAndProcessFile(ddsPath, ProcessSpan);
+
+            void ProcessSpan(ReadOnlySpan<byte> span)
+            {
+                fixed (byte* ptr = span)
+                {
+                    var flags = DDSFLAGS.DDS_FLAGS_NONE;
+
+                    using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
+                        ptr,
+                        span.Length,
+                        flags,
+                        null))
+                    {
+
+                        var newpath = Path.ChangeExtension(ddsPath, filetype.ToString().ToLower());
+
+                        DirectXTexSharp.Texcconv.ConvertDdsImage(scratchImage, newpath, filetype, false, false);
+
+                    }
+                }
+            } 
         }
     }
 }

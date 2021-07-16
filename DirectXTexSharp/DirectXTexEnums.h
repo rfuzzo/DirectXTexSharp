@@ -101,4 +101,41 @@ namespace DirectXTexSharp {
         // Forces use of the WIC path even when logic would have picked a non-WIC path when both are an option
     };
 
+    //const SValue<uint32_t> g_pSaveFileTypes[] =   // valid formats to write to
+    //{
+    //    { L"BMP",   WIC_CODEC_BMP  },
+    //    { L"JPG",   WIC_CODEC_JPEG },
+    //    { L"JPEG",  WIC_CODEC_JPEG },
+    //    { L"PNG",   WIC_CODEC_PNG  },
+    //    { L"DDS",   CODEC_DDS      },
+    //    { L"TGA",   CODEC_TGA      },
+    //    { L"HDR",   CODEC_HDR      },
+    //    { L"TIF",   WIC_CODEC_TIFF },
+    //    { L"TIFF",  WIC_CODEC_TIFF },
+    //    { L"WDP",   WIC_CODEC_WMP  },
+    //    { L"HDP",   CODEC_HDP      },
+    //    { L"JXR",   CODEC_JXR      },
+    //    { L"PPM",   CODEC_PPM      },
+    //    { L"PFM",   CODEC_PFM      },
+    //#ifdef USE_OPENEXR
+    //    { L"EXR",   CODEC_EXR      },
+    //#endif
+    //    { nullptr,  CODEC_DDS      }
+    //};
+
+    public enum class ESaveFileTypes
+    {
+        BMP,
+        JPEG,
+        PNG,
+        TGA,
+        HDR,
+        TIFF,
+        /*WIC_CODEC_WMP,
+        CODEC_HDP,
+        CODEC_JXR,
+        CODEC_PPM,
+        CODEC_PFMm*/
+    };
+
 }

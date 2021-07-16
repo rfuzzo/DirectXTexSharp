@@ -10,6 +10,22 @@ using namespace System::Runtime::InteropServices;
 
 namespace DirectXTexSharp {
 
+	public ref class Texcconv sealed
+	{
+	public:
+		static void ConvertDdsImage(
+			DirectXTexSharp::ScratchImage^ srcImage,
+			System::String^ szFile,
+			DirectXTexSharp::ESaveFileTypes filetype,
+			bool vflip, 
+			bool hflip);
+
+		static void DirectXTexSharp::Texcconv::GetWicPropsJpg(IPropertyBag2* props);
+		static void DirectXTexSharp::Texcconv::GetWicPropsTiff(IPropertyBag2* props);
+
+	};
+
+
 	public ref class Metadata sealed
 	{
 	public:
@@ -35,7 +51,12 @@ namespace DirectXTexSharp {
 			DirectXTexSharp::TexMetadata^ metadata/*,
 			DirectXTexSharp::ScratchImage^ image*/);
 
-
+		static DirectXTexSharp::ScratchImage^ LoadFromDDSMemory(
+			byte* pSource,
+			const int size,
+			DirectXTexSharp::DDSFLAGS flags,
+			DirectXTexSharp::TexMetadata^ metadata/*,
+			DirectXTexSharp::ScratchImage^ image*/);
 
 		
 		static void SaveToTGAFile(

@@ -18,9 +18,17 @@ TexMetadata^ ScratchImage::GetMetadata()
 	return gcnew DirectXTexSharp::TexMetadata(native_metadata);
 }
 
-System::IntPtr^ ScratchImage::GetPixels()
+array<byte>^ ScratchImage::GetPixels()
 {
-	return static_cast<System::IntPtr>(*m_instance_->GetPixels());
+	auto dataSize = this->GetPixelsSize();
+	auto ptr = m_instance_->GetPixels();
+
+	array<byte>^ _Data = gcnew array<byte>(dataSize);
+
+	for (int i = 0; i < _Data->Length; ++i)
+		_Data[i] = ptr[i];
+
+	return _Data;
 }
 
 int ScratchImage::GetPixelsSize()
@@ -33,4 +41,9 @@ Image^ ScratchImage::GetImages()
 	const DirectX::Image* native_image = m_instance_->GetImages();	
 	DirectX::Image* native_image_ptr = const_cast<DirectX::Image*>(native_image);
 	return gcnew DirectXTexSharp::Image(*native_image_ptr);
+}
+
+int DirectXTexSharp::ScratchImage::GetImageCount()
+{
+	return m_instance_->GetImageCount();
 }

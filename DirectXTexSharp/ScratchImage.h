@@ -60,9 +60,12 @@ namespace DirectXTexSharp {
 	        ScratchImage(DirectX::ScratchImage& image);
     		
 	        TexMetadata^ GetMetadata();
-	        System::IntPtr^ GetPixels();
+
+            array<byte>^ GetPixels();
 	        int GetPixelsSize();
+
 	        Image^ GetImages();
+            int GetImageCount();
 
 	};
 }
