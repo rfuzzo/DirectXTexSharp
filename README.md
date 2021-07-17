@@ -1,5 +1,5 @@
 # DirectXTexSharp
- A c++/CLI wrapper around DirectXTex.
+ A c++/CLI wrapper around DirectXTex and Texconv. Available as managed nuget for x64 and x86 platforms.
 
 ## Installation
 
