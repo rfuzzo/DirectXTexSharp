@@ -19,19 +19,46 @@ Install-Package DirectXTexSharp
 using DirectXTexSharp;
 
 
-[TestMethod]
-public void TestGetMetadataFromDDSFile()
+fixed (byte* ptr = span)
 {
-    using (var metadata = new DirectXTexSharp.TexMetadata())
-    {
-        var flags = DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE;
+    var outDir = Path.Combine( new FileInfo(ddsPath).Directory.FullName, "out");
+    Directory.CreateDirectory(outDir);
+    var fileName = Path.GetFileNameWithoutExtension(ddsPath);
+    var extension = filetype.ToString().ToLower();
+    var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
-        var r = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(ddsPath, flags, metadata);
+    var len = span.Length;
 
-        Assert.AreEqual(0, r);
-    }
+    // test direct saving
+    DirectXTexSharp.Texcconv.ConvertAndSaveDdsImage(ptr, len, newpath, filetype, false, false);
+
+    // test buffer saving
+    var buffer = DirectXTexSharp.Texcconv.ConvertDdsImageToArray(ptr, len, filetype, false, false);
+    var newpath2 = Path.Combine(outDir, $"{fileName}.2.{extension}");
+    File.WriteAllBytes(newpath2, buffer);
+
 }
 ```
+## Currently implemented Texconv functions:
+- [ ] ConvertAndSaveDdsImage
+- [ ] ConvertDdsImageToArray
+
+- [x] Flip/Rotate
+- [ ] Resize
+- [ ] Swizzle
+- [ ] Color rotation
+- [ ] Tonemap
+- [x] Convert
+- [ ] Convert NormalMaps
+- [ ] ColorKey/ChromaKey
+- [ ] Invert Y Channel
+- [ ] Reconstruct Z Channel
+- [ ] Determine whether preserve alpha coverage is required
+- [ ] Generate mips
+- [ ] Preserve mipmap alpha coverage
+- [ ] Premultiplied alpha
+- [ ] Compress
+- [x] Set alpha mode
 
 
 ## Currently implemented DirectXTex functions:

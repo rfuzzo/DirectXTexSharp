@@ -304,7 +304,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texcconv::ConvertDdsMemo
 
     }
 
-    // --- Flip/Rotate -------------------------------------------------------------
+    // Flip/Rotate
     if (vflip | hflip)
     {
         std::unique_ptr<DirectX::ScratchImage> timage(new (std::nothrow) DirectX::ScratchImage);
