@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using DirectXTexSharp;
+//using DirectXTexSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
@@ -14,20 +17,25 @@ namespace Tests
         [TestMethod]
         public void TestGetMetadataFromDDSFile()
         {
-            using (var metadata = new DirectXTexSharp.TexMetadata())
+            var flags = DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE;
+
+            using (var metadata = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(ddsPath, flags))
             {
-                var flags = DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE;
+                //Console.WriteLine("Before wait");
+                //Console.WriteLine($"test: {metadata.width}");
 
-                var r = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(ddsPath, flags, metadata);
+                //Thread.Sleep(1000);
 
-                Assert.AreEqual(0, r);
-            }
+                //Console.WriteLine("After wait");
+                //Console.WriteLine($"test: {metadata.width}");
+
+                Assert.AreEqual(512, metadata.width);
+            } 
         }
 
         [TestMethod]
         public void TestGetMetadataFromDDSMemory()
         {
-            using (var metadata = new TexMetadata())
             using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
             {
                 var ms = new MemoryStream();
@@ -40,14 +48,13 @@ namespace Tests
 
                 var flags = DDSFLAGS.DDS_FLAGS_NONE;
 
-                var r = DirectXTexSharp.Metadata.GetMetadataFromDDSMemory(
+                using (var metadata = DirectXTexSharp.Metadata.GetMetadataFromDDSMemory(
                     inputAddress,
                     inputBytes.Length,
-                    flags,
-                    metadata
-                );
-
-                Assert.AreEqual(0, r);
+                    flags))
+                {
+                    Assert.AreEqual(512, metadata.width);
+                } 
             }
         }
     }

@@ -1,9 +1,6 @@
 #pragma once
 
-
 #include "Image.h"
-#include "ManagedObject.h"
-#include "TexMetadata.h"
 
 namespace DirectXTexSharp {
 
@@ -56,16 +53,19 @@ namespace DirectXTexSharp {
         uint8_t* m_memory;
     };*/
 
+	public ref class ScratchImage sealed : CLI::ManagedObject<DirectX::ScratchImage> {
 
-    public ref class ScratchImage : CLI::ManagedObject<DirectX::ScratchImage> {
+	    public:
+	        ScratchImage();
+	        ScratchImage(DirectX::ScratchImage& image);
+    		
+	        TexMetadata^ GetMetadata();
 
-    public:
-        ScratchImage();
+            array<byte>^ GetPixels();
+	        int GetPixelsSize();
 
-        TexMetadata^ GetMetadata();
-        System::IntPtr^ GetPixels();
-        int GetPixelsSize();
-        Image^ GetImages();
-    	
-    };
+	        Image^ GetImages();
+            int GetImageCount();
+
+	};
 }

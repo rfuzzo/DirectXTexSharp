@@ -1,37 +1,31 @@
-//ManagedObject.h
 #pragma once
 
 namespace CLI {
 
     template<class T>
-    public ref class ManagedObject
-    {
-    protected:
-        T* m_Instance;
-    public:
-        ManagedObject(T* instance)
-            : m_Instance(instance)
-        {
-        }
+    public ref class ManagedObject {
+        protected:
+            T* m_instance_;
+        public:
+            ManagedObject(T* instance) : m_instance_(instance){
+
+            	
+            }
+    	
 		
-        virtual ~ManagedObject()
-        {
-            if (m_Instance != nullptr)
-            {
-                delete m_Instance;
+            virtual ~ManagedObject() {
+                if (m_instance_ != nullptr) {
+                    delete m_instance_;
+                }
             }
-        }
-        !ManagedObject()
-        {
-            if (m_Instance != nullptr)
-            {
-                delete m_Instance;
+            !ManagedObject() {
+                if (m_instance_ != nullptr) {
+                    delete m_instance_;
+                }
             }
-        }
-        T* GetInstance()
-        {
-            return m_Instance;
-        }
+            T* get_instance() {
+                return m_instance_;
+            }
     };
 
     

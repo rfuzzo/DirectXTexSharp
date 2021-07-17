@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Buffers;
+using System.IO;
 using System.Runtime.InteropServices;
 using DirectXTexSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace Tests
 {
@@ -10,92 +13,135 @@ namespace Tests
     {
         const string ddsPath = @"X:\cp77\TEMP\rain_normal.dds";
 
-
         [TestMethod]
-        public void TestSaveToTGAFile()
+        public unsafe void TestSaveToTgaFileSpan()
         {
-            using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
-            using (var ms = new MemoryStream())
-            using (var metadata = new TexMetadata())
-            using (var scratchImage = new ScratchImage())
+            byte[] rentedBuffer = null;
+            try
             {
-                fs.Seek(0, SeekOrigin.Begin);
-                fs.CopyTo(ms);
+                int len;
+                var offset = 0;
 
-                var inputBytes = ms.ToArray();
-                var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-                var inputAddress = inputHandle.AddrOfPinnedObject();
-
-                var flags = DDSFLAGS.DDS_FLAGS_NONE;
-
-                // load dds
-
-                var resultLoad = DirectXTexSharp.IO.LoadFromDDSMemory(
-                    inputAddress,
-                    inputBytes.Length,
-                    flags,
-                    metadata,
-                    scratchImage);
-
-                Assert.AreEqual(0, resultLoad);
-
-                var sourceImage = scratchImage.GetImages();
-
-                // convert to DXGI_FORMAT_R8G8B8A8_UNORM
-
-                var format = DXGI_FORMAT_WRAPPED.DXGI_FORMAT_R8G8B8A8_UNORM;
-                using (var newscratchImage = new ScratchImage())
+                using (var stream = File.OpenRead(ddsPath))
                 {
-                    var resultDecompress = DirectXTexSharp.Conversion.Decompress(
-                        sourceImage,
-                        format,
-                        newscratchImage
-                    );
+                    len = checked((int)stream.Length);
+                    rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
+                    
+                    int readBytes;
+                    while (offset < len &&
+                           (readBytes = stream.Read(rentedBuffer, offset, len - offset)) > 0)
+                    {
+                        offset += readBytes;
+                    }
+                }
 
-                    Assert.AreEqual(0, resultDecompress);
+                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
 
-                    var uncompressedImage = newscratchImage.GetImages();
-                    var newImageMd = newscratchImage.GetMetadata();
+                ProcessSpan(span);
+            }
+            finally
+            {
+                if (rentedBuffer is object)
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+            }
 
-                    // save to tga
+            void ProcessSpan(ReadOnlySpan<byte> span)
+            {
+                fixed (byte* ptr = span)
+                {
+                    var flags = DDSFLAGS.DDS_FLAGS_NONE;
 
-                    var newPath = Path.ChangeExtension(ddsPath, "tga");
-                    var resultSave = DirectXTexSharp.IO.SaveToTGAFile(
-                        uncompressedImage,
-                        newPath,
-                        newImageMd);
+                    //using (var metadata = new TexMetadata())
+                    using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
+                        ptr,
+                        span.Length,
+                        flags,
+                        null))
+                    {
+                        Assert.IsNotNull(scratchImage);
 
-                    Assert.AreEqual(0, resultSave);
+                        // convert to DXGI_FORMAT_R8G8B8A8_UNORM
+                        var format = DXGI_FORMAT_WRAPPED.DXGI_FORMAT_R8G8B8A8_UNORM;
 
+                        using (var sourceImage = scratchImage.GetImages())
+                        using (var newscratchImage = DirectXTexSharp.Conversion.Decompress(
+                            sourceImage,
+                            format))
+                        {
+
+                            var uncompressedImage = newscratchImage.GetImages();
+
+                            // save to tga
+                            var newPath = Path.ChangeExtension(ddsPath, "tga");
+                            DirectXTexSharp.IO.SaveToTGAFile(
+                                uncompressedImage,
+                                newPath,
+                                null);
+                        }
+                    }
                 }
             }
         }
 
         [TestMethod]
-        public void TestLoadFromDDSMemory()
+        public unsafe void TestLoadFromDDSMemory()
         {
-            using (var fs = new FileStream(ddsPath, FileMode.Open, FileAccess.Read))
-            using (var metadata = new TexMetadata())
-            using (var scratchImage = new ScratchImage())
+            byte[] rentedBuffer = null;
+            try
             {
-                var ms = new MemoryStream();
-                fs.Seek(0, SeekOrigin.Begin);
-                fs.CopyTo(ms);
+                int len;
+                var offset = 0;
 
-                var inputBytes = ms.ToArray();
-                var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-                var inputAddress = inputHandle.AddrOfPinnedObject();
+                using (var stream = File.OpenRead(ddsPath))
+                {
+                    len = checked((int)stream.Length);
+                    rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
 
-                var flags = DDSFLAGS.DDS_FLAGS_NONE;
+                    int readBytes;
+                    while (offset < len &&
+                           (readBytes = stream.Read(rentedBuffer, offset, len - offset)) > 0)
+                    {
+                        offset += readBytes;
+                    }
+                }
 
-                var r = DirectXTexSharp.IO.LoadFromDDSMemory(
-                    inputAddress,
-                    inputBytes.Length,
-                    flags,
-                    metadata,
-                    scratchImage);
+                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
 
-                Assert.AreEqual(0, r);
+                ProcessSpan(span);
+            }
+            finally
+            {
+                if (rentedBuffer is object)
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+            }
+
+            void ProcessSpan(ReadOnlySpan<byte> span)
+            {
+                fixed (byte* ptr = span)
+                {
+                    var flags = DDSFLAGS.DDS_FLAGS_NONE;
+
+                    //using (var metadata = new TexMetadata())
+                    using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
+                        ptr,
+                        span.Length,
+                        flags,
+                        null))
+                    {
+
+                        using (var imageMetadata = scratchImage.GetMetadata())
+                        {
+                        }
+                        var imagePixelsSize = scratchImage.GetPixelsSize();
+
+                        var imageImageCount = scratchImage.GetImageCount();
+                        using (var imageImages = scratchImage.GetImages())
+                        {
+                        }
+                        var imagePixels = scratchImage.GetPixels();
+
+                    }
+                }
             }
         }
 

@@ -22,8 +22,8 @@
     <Filter Include="Header Files\DirectXTexSharp">
       <UniqueIdentifier>{3f0c1f87-a120-4588-a0fd-ffee618efee6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\DirectXTex">
-      <UniqueIdentifier>{aa790797-cfa9-40af-8463-b9691c31110d}</UniqueIdentifier>
+    <Filter Include="Source Files\Classes">
+      <UniqueIdentifier>{76cd5662-e42e-42ad-8e8c-97d8cf383fa4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -32,9 +32,6 @@
     </ClInclude>
     <ClInclude Include="ManagedObject.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTex.h">
-      <Filter>Header Files\DirectXTex</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files\Auto</Filter>
@@ -59,20 +56,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TexMetadata.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files\Auto</Filter>
     </ClCompile>
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files\Auto</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScratchImage.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Metadata.cpp">
       <Filter>Source Files</Filter>
@@ -81,6 +69,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Conversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Source Files\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ScratchImage.cpp">
+      <Filter>Source Files\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="TexMetadata.cpp">
+      <Filter>Source Files\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Texconv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,10 +93,5 @@
     <Image Include="app.ico">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DirectXTex.inl">
-      <Filter>Header Files\DirectXTex</Filter>
-    </None>
   </ItemGroup>
 </Project>
