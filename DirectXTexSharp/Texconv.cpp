@@ -21,101 +21,95 @@ int DirectXTexSharp::Texcconv::ConvertAndSaveDdsImage(
 
 	msclr::interop::marshal_context context;
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-    
-    // Save result
+        
+    auto image = ConvertDdsMemory(bytePtr, len, filetype, vflip, hflip);
+    auto img = image->GetImage(0, 0, 0);
+    assert(img);
+
+    switch (filetype)
     {
-        auto image = ConvertDdsMemory(bytePtr, len, filetype, vflip, hflip);
+    case DirectXTexSharp::ESaveFileTypes::TGA:
+    {
+        hr = DirectX::SaveToTGAFile(
+            img[0], 
+            DirectX::TGA_FLAGS_NONE, 
+            context.marshal_as<const wchar_t*>(szFile), 
+            /*(dwOptions & (uint64_t(1) << OPT_TGA20)) ? &info :*/ nullptr);
+        break;
+    }
+    // broken for some reason
+    /*case DirectXTexSharp::ESaveFileTypes::HDR:
+    {
+        hr = DirectX::SaveToHDRFile(img[0], context.marshal_as<const wchar_t*>(szFile));
+        break;
+    }*/
+    case DirectXTexSharp::ESaveFileTypes::JPEG:
+    {
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_JPEG;
+        size_t nimages = 1;
 
-        auto img = image->GetImage(0, 0, 0);
-        assert(img);
+        hr = DirectX::SaveToWICFile(
+            img, 
+            nimages, 
+            DirectX::WIC_FLAGS_NONE, 
+            DirectX::GetWICCodec(codec), 
+            context.marshal_as<const wchar_t*>(szFile), 
+            nullptr, 
+            GetWicPropsJpg);
+        break;
+    }
+    case DirectXTexSharp::ESaveFileTypes::TIFF:
+    {
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
+        size_t nimages = 1;
 
-        //size_t nimg = image->GetImageCount();
+        hr = DirectX::SaveToWICFile(
+            img,
+            nimages,
+            DirectX::WIC_FLAGS_NONE,
+            DirectX::GetWICCodec(codec),
+            context.marshal_as<const wchar_t*>(szFile),
+            nullptr,
+            GetWicPropsTiff);
+        break;
+    }
+    case DirectXTexSharp::ESaveFileTypes::PNG:
+    {
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
+        size_t nimages = 1;
 
-        switch (filetype)
-        {
-        case DirectXTexSharp::ESaveFileTypes::TGA:
-        {
-            hr = DirectX::SaveToTGAFile(
-                img[0], 
-                DirectX::TGA_FLAGS_NONE, 
-                context.marshal_as<const wchar_t*>(szFile), 
-                /*(dwOptions & (uint64_t(1) << OPT_TGA20)) ? &info :*/ nullptr);
-            break;
-        }
-        // broken for some reason
-        /*case DirectXTexSharp::ESaveFileTypes::HDR:
-        {
-            hr = DirectX::SaveToHDRFile(img[0], context.marshal_as<const wchar_t*>(szFile));
-            break;
-        }*/
-        case DirectXTexSharp::ESaveFileTypes::JPEG:
-        {
-            DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_JPEG;
-            size_t nimages = 1;
+        hr = DirectX::SaveToWICFile(
+            img,
+            nimages,
+            DirectX::WIC_FLAGS_NONE,
+            DirectX::GetWICCodec(codec),
+            context.marshal_as<const wchar_t*>(szFile),
+            nullptr,
+            nullptr);
+        break;
+    }
+    case DirectXTexSharp::ESaveFileTypes::BMP:
+    {
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
+        size_t nimages = 1;
 
-            hr = DirectX::SaveToWICFile(
-                img, 
-                nimages, 
-                DirectX::WIC_FLAGS_NONE, 
-                DirectX::GetWICCodec(codec), 
-                context.marshal_as<const wchar_t*>(szFile), 
-                nullptr, 
-                GetWicPropsJpg);
-            break;
-        }
-        case DirectXTexSharp::ESaveFileTypes::TIFF:
-        {
-            DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
-            size_t nimages = 1;
+        hr = DirectX::SaveToWICFile(
+            img,
+            nimages,
+            DirectX::WIC_FLAGS_NONE,
+            DirectX::GetWICCodec(codec),
+            context.marshal_as<const wchar_t*>(szFile),
+            nullptr,
+            nullptr);
+        break;
+    }
 
-            hr = DirectX::SaveToWICFile(
-                img,
-                nimages,
-                DirectX::WIC_FLAGS_NONE,
-                DirectX::GetWICCodec(codec),
-                context.marshal_as<const wchar_t*>(szFile),
-                nullptr,
-                GetWicPropsTiff);
-            break;
-        }
-        case DirectXTexSharp::ESaveFileTypes::PNG:
-        {
-            DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
-            size_t nimages = 1;
+    }
 
-            hr = DirectX::SaveToWICFile(
-                img,
-                nimages,
-                DirectX::WIC_FLAGS_NONE,
-                DirectX::GetWICCodec(codec),
-                context.marshal_as<const wchar_t*>(szFile),
-                nullptr,
-                nullptr);
-            break;
-        }
-        case DirectXTexSharp::ESaveFileTypes::BMP:
-        {
-            DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
-            size_t nimages = 1;
-
-            hr = DirectX::SaveToWICFile(
-                img,
-                nimages,
-                DirectX::WIC_FLAGS_NONE,
-                DirectX::GetWICCodec(codec),
-                context.marshal_as<const wchar_t*>(szFile),
-                nullptr,
-                nullptr);
-            break;
-        }
-
-        }
-
-        if (FAILED(hr))
-        {
-            wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr));
-            return 1;
-        }
+    if (FAILED(hr))
+    {
+        wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr));
+        return 1;
     }
 
     return 0;
@@ -220,14 +214,12 @@ array<System::Byte>^ DirectXTexSharp::Texcconv::ConvertDdsImageToArray(byte* byt
 
     auto len_buffer = blob.GetBufferSize();
     auto buffer = static_cast<uint8_t*>(blob.GetBufferPointer());
-
     array<byte>^ _Data = gcnew array<byte>(len_buffer);
 
     for (int i = 0; i < _Data->Length; ++i)
         _Data[i] = buffer[i];
 
     return _Data;
-
 }
 
 
@@ -363,7 +355,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texcconv::ConvertDdsMemo
     // Tonemap
 
     // Convert
-    // NormalMaps
+    // Convert NormalMaps
     if (info.format != tformat && !DirectX::IsCompressed(tformat))
     {
         std::unique_ptr<DirectX::ScratchImage> timage(new (std::nothrow) DirectX::ScratchImage);

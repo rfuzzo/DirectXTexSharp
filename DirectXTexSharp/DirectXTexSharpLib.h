@@ -48,14 +48,12 @@ namespace DirectXTexSharp {
 	public:
 		static DirectXTexSharp::TexMetadata^ GetMetadataFromDDSFile(
 			System::String^ szFile,
-			DirectXTexSharp::DDSFLAGS flags/*,
-			[Out] DirectXTexSharp::TexMetadata^ metadata*/);
+			DirectXTexSharp::DDSFLAGS flags);
 
 		static DirectXTexSharp::TexMetadata^ GetMetadataFromDDSMemory(
 			IntPtr^ pSource,
 			int size,
-			DirectXTexSharp::DDSFLAGS flags/*,
-			DirectXTexSharp::TexMetadata^ metadata*/);
+			DirectXTexSharp::DDSFLAGS flags);
 	};
 
 	public ref class IO sealed
@@ -65,14 +63,13 @@ namespace DirectXTexSharp {
 			byte* pSource,
 			const int size,
 			DirectXTexSharp::DDSFLAGS flags,
-			DirectXTexSharp::TexMetadata^ metadata/*,
-			DirectXTexSharp::ScratchImage^ image*/);
+			DirectXTexSharp::TexMetadata^ metadata);
 
 		
 		static void SaveToTGAFile(
 			DirectXTexSharp::Image^ srcImage,
 			System::String^ szFile,
-			/*[Out]*/ DirectXTexSharp::TexMetadata^ metadata);
+			DirectXTexSharp::TexMetadata^ metadata);
 
 	};
 	
@@ -84,14 +81,12 @@ namespace DirectXTexSharp {
             DirectXTexSharp::Image^ srcImage,
 			DirectXTexSharp::DXGI_FORMAT_WRAPPED format,
             DirectXTexSharp::TEX_FILTER_FLAGS filter,
-            float threshold/*,
-            DirectXTexSharp::ScratchImage^ image*/);
+            float threshold);
 
      
 		static DirectXTexSharp::ScratchImage^ Decompress(
 			Image^ cImage,
-			DirectXTexSharp::DXGI_FORMAT_WRAPPED format/*,
-			DirectXTexSharp::ScratchImage^ image*/);
+			DirectXTexSharp::DXGI_FORMAT_WRAPPED format);
 	
 	};
 
