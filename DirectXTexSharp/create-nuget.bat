@@ -1,11 +1,11 @@
 @echo off
 
-echo "nuget pack x64"
+set vs_com19="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\vsdevcmd.bat"
 
-nuget pack .\DirectXTexSharp.nuspec -Build -NoPackageAnalysis -Properties 'Configuration=Debug;Platform=x64;CConfiguration=Debug;CPlatform=x64;' -OutputDirectory nuget -Version 0.2
+call %vs_com19%
+call msbuild -t:restore /t:Build /p:Configuration=Debug /p:Platform=x64 /p:PublishProfile=x64
+call msbuild -t:restore /t:Build /p:Configuration=Debug /p:Platform=x86 /p:PublishProfile=x86
 
-::echo "nuget pack win32"
-::nuget pack .\DirectXTexSharp.nuspec -Build -NoPackageAnalysis -Properties 'Configuration=Release;Platform=win32;CConfiguration=Release;CPlatform=win32;' -OutputDirectory nuget -Version 0.4
-
+nuget pack .\DirectXTexSharp.nuspec -NoPackageAnalysis -Properties 'Configuration=Debug;CConfiguration=Debug;' -OutputDirectory nuget -Version 0.4
 
 echo "finished"

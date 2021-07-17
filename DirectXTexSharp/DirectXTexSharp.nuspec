@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
-  <metadata>
-    <id>DirectXTexSharp.$CPlatform$</id>
+  <metadata minClientVersion="2.5">
+    <id>DirectXTexSharp</id>
     <version>$version$</version>
     <authors>Moritz Baron</authors>
     <license type="expression">MIT</license>
@@ -13,7 +13,14 @@
   </metadata>
 
   <files>
-    <file src="bin\$CPlatform$\$CConfiguration$\*.dll" target="lib" />
+    <!-- Include everything in \build -->
+    <file src="build\**" target="build" />
+
+    <file src="bin\x64\$CConfiguration$\DirectXTexSharp.dll" target="runtimes\win-x64\native" />
+    <file src="bin\x64\$CConfiguration$\Ijwhost.dll" target="runtimes\win-x64\native" />
+
+    <file src="bin\win32\$CConfiguration$\DirectXTexSharp.dll" target="runtimes\win-x86\native" />
+    <file src="bin\win32\$CConfiguration$\Ijwhost.dll" target="runtimes\win-x86\native" />
   </files>
 
 </package>
