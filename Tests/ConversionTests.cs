@@ -111,17 +111,6 @@ namespace Tests
                     var len = span.Length;
 
                     DirectXTexSharp.Texcconv.ConvertDdsImage(ptr, len, newpath, filetype, false, false);
-
-                    //using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
-                    //    ptr,
-                    //    span.Length,
-                    //    flags,
-                    //    null))
-                    //{
-
-                        
-
-                    //}
                 }
             } 
         }

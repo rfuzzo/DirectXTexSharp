@@ -129,7 +129,7 @@ namespace DirectXTexSharp {
         JPEG,
         PNG,
         TGA,
-        HDR,
+        //HDR, //broken for some reason, disabling for now
         TIFF,
         /*WIC_CODEC_WMP,
         CODEC_HDP,

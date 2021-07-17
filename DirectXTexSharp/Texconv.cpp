@@ -265,11 +265,12 @@ int DirectXTexSharp::Texcconv::ConvertDdsImage(
                 /*(dwOptions & (uint64_t(1) << OPT_TGA20)) ? &info :*/ nullptr);
             break;
         }
-        case DirectXTexSharp::ESaveFileTypes::HDR:
+        // broken for some reason
+        /*case DirectXTexSharp::ESaveFileTypes::HDR:
         {
             hr = DirectX::SaveToHDRFile(img[0], context.marshal_as<const wchar_t*>(szFile));
             break;
-        }
+        }*/
         case DirectXTexSharp::ESaveFileTypes::JPEG:
         {
             DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_JPEG;
