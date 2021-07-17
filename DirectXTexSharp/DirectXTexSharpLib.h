@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "ScratchImage.h"
 #include "TexMetadata.h"
+#include <memory>
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
@@ -13,7 +14,7 @@ namespace DirectXTexSharp {
 	public ref class Texcconv sealed
 	{
 	public:
-		static int ConvertDdsImage(
+		static int ConvertAndSaveDdsImage(
 			byte* bytePtr,
 			int len,
 			System::String^ szFile,
@@ -21,9 +22,23 @@ namespace DirectXTexSharp {
 			bool vflip, 
 			bool hflip);
 
+		static array<System::Byte>^ ConvertDdsImageToArray(
+			byte* bytePtr,
+			int len,
+			DirectXTexSharp::ESaveFileTypes filetype,
+			bool vflip,
+			bool hflip);
+
 	private:
 		static void DirectXTexSharp::Texcconv::GetWicPropsJpg(IPropertyBag2* props);
 		static void DirectXTexSharp::Texcconv::GetWicPropsTiff(IPropertyBag2* props);
+
+		static std::unique_ptr<DirectX::ScratchImage>  ConvertDdsMemory(
+			byte* bytePtr,
+			int len,
+			DirectXTexSharp::ESaveFileTypes filetype,
+			bool vflip,
+			bool hflip);
 
 	};
 
