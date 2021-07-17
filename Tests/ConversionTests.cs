@@ -107,18 +107,21 @@ namespace Tests
                 {
                     var flags = DDSFLAGS.DDS_FLAGS_NONE;
 
-                    using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
-                        ptr,
-                        span.Length,
-                        flags,
-                        null))
-                    {
+                    var newpath = Path.ChangeExtension(ddsPath, filetype.ToString().ToLower());
+                    var len = span.Length;
 
-                        var newpath = Path.ChangeExtension(ddsPath, filetype.ToString().ToLower());
+                    DirectXTexSharp.Texcconv.ConvertDdsImage(ptr, len, newpath, filetype, false, false);
 
-                        DirectXTexSharp.Texcconv.ConvertDdsImage(scratchImage, newpath, filetype, false, false);
+                    //using (var scratchImage = DirectXTexSharp.IO.LoadFromDDSMemory(
+                    //    ptr,
+                    //    span.Length,
+                    //    flags,
+                    //    null))
+                    //{
 
-                    }
+                        
+
+                    //}
                 }
             } 
         }

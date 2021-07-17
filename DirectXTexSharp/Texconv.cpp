@@ -12,8 +12,9 @@ using namespace DirectXTexSharp;
 //HRESULT __cdecl SaveToTGAMemory(_In_ const Image & image,
 //	_In_ TGA_FLAGS flags,
 //	_Out_ Blob & blob, _In_opt_ const TexMetadata * metadata = nullptr) noexcept;
-void DirectXTexSharp::Texcconv::ConvertDdsImage(
-	ScratchImage^ srcImage,
+int DirectXTexSharp::Texcconv::ConvertDdsImage(
+    byte* bytePtr,
+    int len,
 	System::String^ szFile,
 	DirectXTexSharp::ESaveFileTypes filetype, 
     bool vflip, 
@@ -31,13 +32,28 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
     float alphaThreshold = DirectX::TEX_THRESHOLD_DEFAULT;
     
     bool non4bc = false;
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+
+    // load image from memory
+    DirectX::DDS_FLAGS ddsFlags = DirectX::DDS_FLAGS_ALLOW_LARGE_FILES;
+    DirectX::TexMetadata info;
+    std::unique_ptr<DirectX::ScratchImage> image(new (std::nothrow) DirectX::ScratchImage);
+    
+    hr = DirectX::LoadFromDDSMemory(bytePtr, len, ddsFlags, &info, *image);
+    if (FAILED(hr))
+    {
+        wprintf(L" FAILED (%08X%ls)\n", static_cast<unsigned int>(hr));
+        return 1;
+    }
 
 
+	/*auto metadata = srcImage->GetMetadata();
+	auto info = *metadata->get_instance();*/
 
-	auto metadata = srcImage->GetMetadata();
-	auto info = *metadata->get_instance();
-    auto imageptr = srcImage->get_instance();
-    std::unique_ptr<DirectX::ScratchImage> image = (std::unique_ptr<DirectX::ScratchImage>)imageptr;
+    //auto image/*ptr*/ = srcImage->get_instance();
+    //std::unique_ptr<DirectX::ScratchImage> image = (std::unique_ptr<DirectX::ScratchImage>)imageptr;
+    // using a raw pointer here because the managed object is disposed in outer scope
+    //DirectX::ScratchImage* image = imageptr;
 
 	// IsTypeless
 	// IsPlanar
@@ -66,17 +82,18 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         size_t nimg = image->GetImageCount();
 
         std::unique_ptr<DirectX::ScratchImage> timage(new (std::nothrow) DirectX::ScratchImage);
+        //auto timage(new (std::nothrow) DirectX::ScratchImage);
         if (!timage)
         {
             wprintf(L"\nERROR: Memory allocation failed\n");
-            return;
+            return 1;
         }
 
         auto hr = DirectX::Decompress(img, nimg, info, DXGI_FORMAT_UNKNOWN /* picks good default */, *timage);
         if (FAILED(hr))
         {
             wprintf(L" FAILED [decompress] (%08X%ls)\n", static_cast<unsigned int>(hr));
-            return;
+            return 1;
         }
 
         auto& tinfo = timage->GetMetadata();
@@ -91,17 +108,21 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         assert(info.miscFlags == tinfo.miscFlags);
         assert(info.dimension == tinfo.dimension);
 
+        /*std::swap(image, timage);
+        delete timage;*/
         image.swap(timage);
+
     }
 
     // --- Flip/Rotate -------------------------------------------------------------
     if (vflip | hflip)
     {
         std::unique_ptr<DirectX::ScratchImage> timage(new (std::nothrow) DirectX::ScratchImage);
+        //auto timage(new (std::nothrow) DirectX::ScratchImage);
         if (!timage)
         {
             wprintf(L"\nERROR: Memory allocation failed\n");
-            return;
+            return 1;
         }
 
         DirectX::TEX_FR_FLAGS dwFlags = DirectX::TEX_FR_ROTATE0;
@@ -118,7 +139,7 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         if (FAILED(hr))
         {
             wprintf(L" FAILED [fliprotate] (%08X%ls)\n", static_cast<unsigned int>(hr));
-            return;
+            return 1;
         }
 
         auto& tinfo = timage->GetMetadata();
@@ -133,7 +154,11 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         assert(info.format == tinfo.format);
         assert(info.dimension == tinfo.dimension);
 
+        /*std::swap(image, timage);
+        delete timage;*/
         image.swap(timage);
+
+        
         //cimage.reset();
     }
 
@@ -147,10 +172,11 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
     if (info.format != tformat && !DirectX::IsCompressed(tformat))
     {
         std::unique_ptr<DirectX::ScratchImage> timage(new (std::nothrow) DirectX::ScratchImage);
+        //auto timage(new (std::nothrow) DirectX::ScratchImage);
         if (!timage)
         {
             wprintf(L"\nERROR: Memory allocation failed\n");
-            return;
+            return 1;
         }
 
         auto hr = DirectX::Convert(image->GetImages(), image->GetImageCount(), image->GetMetadata(), tformat,
@@ -158,7 +184,7 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         if (FAILED(hr))
         {
             wprintf(L" FAILED [convert] (%08X%ls)\n", static_cast<unsigned int>(hr));
-            return;
+            return 1;
         }
 
         auto& tinfo = timage->GetMetadata();
@@ -174,7 +200,11 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         assert(info.miscFlags == tinfo.miscFlags);
         assert(info.dimension == tinfo.dimension);
 
+        /*std::swap(image, timage);
+        delete timage;*/
         image.swap(timage);
+
+        
         //cimage.reset();
     }
 
@@ -223,7 +253,6 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         assert(img);
         size_t nimg = image->GetImageCount();
 
-        HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
         switch (filetype)
         {
@@ -307,12 +336,11 @@ void DirectXTexSharp::Texcconv::ConvertDdsImage(
         if (FAILED(hr))
         {
             wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr));
-            return;
+            return 1;
         }
     }
 
-
-
+    return 0;
 }
 
 

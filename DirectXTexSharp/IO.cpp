@@ -17,28 +17,6 @@ _In_reads_bytes_(size) const void* pSource, _In_ size_t size,
 _In_ DDS_FLAGS flags,
 _Out_opt_ TexMetadata * metadata, _Out_ ScratchImage & image) noexcept;*/
 DirectXTexSharp::ScratchImage^ DirectXTexSharp::IO::LoadFromDDSMemory(
-	System::IntPtr^ pSource,
-	const int size,
-	DirectXTexSharp::DDSFLAGS flags,
-	DirectXTexSharp::TexMetadata^ metadata) {
-
-	DirectX::ScratchImage image;
-
-	const auto final_metadata = metadata != nullptr ? metadata->get_instance() : nullptr;
-	
-	auto result = DirectX::LoadFromDDSMemory(
-		static_cast<void*>(*pSource),
-		size,
-		static_cast<DirectX::DDS_FLAGS> (flags),
-		final_metadata,
-		image);
-
-	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
-
-	return gcnew DirectXTexSharp::ScratchImage(image);
-}
-
-DirectXTexSharp::ScratchImage^ DirectXTexSharp::IO::LoadFromDDSMemory(
 	byte* pSource,
 	const int size,
 	DirectXTexSharp::DDSFLAGS flags,

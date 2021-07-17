@@ -13,13 +13,15 @@ namespace DirectXTexSharp {
 	public ref class Texcconv sealed
 	{
 	public:
-		static void ConvertDdsImage(
-			DirectXTexSharp::ScratchImage^ srcImage,
+		static int ConvertDdsImage(
+			byte* bytePtr,
+			int len,
 			System::String^ szFile,
 			DirectXTexSharp::ESaveFileTypes filetype,
 			bool vflip, 
 			bool hflip);
 
+	private:
 		static void DirectXTexSharp::Texcconv::GetWicPropsJpg(IPropertyBag2* props);
 		static void DirectXTexSharp::Texcconv::GetWicPropsTiff(IPropertyBag2* props);
 
@@ -44,13 +46,6 @@ namespace DirectXTexSharp {
 	public ref class IO sealed
 	{
 	public:
-		static DirectXTexSharp::ScratchImage^ LoadFromDDSMemory(
-			IntPtr^ pSource,
-			const int size,
-			DirectXTexSharp::DDSFLAGS flags,
-			DirectXTexSharp::TexMetadata^ metadata/*,
-			DirectXTexSharp::ScratchImage^ image*/);
-
 		static DirectXTexSharp::ScratchImage^ LoadFromDDSMemory(
 			byte* pSource,
 			const int size,
