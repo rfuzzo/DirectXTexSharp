@@ -12,7 +12,7 @@ Install-Package DirectXTexSharp
 
 | Package | NuGet Stable | NuGet Pre-release | Downloads |
 | ------- | ------------ | ----------------- | --------- |
-| [DirectXTexSharp](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/v/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/vpre/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/dt/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) |
+| [DirectXTexSharp](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/v/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/vpre/DirectXTexSharp.svg)](https://www.nuget.org/packages/DirectXTexSharp/) | [![DirectXTexSharp](https://img.shields.io/nuget/dt/DirectXTexSharp)](https://www.nuget.org/packages/DirectXTexSharp/) |
 
 ## Usage
 ```
