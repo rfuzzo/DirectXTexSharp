@@ -1,7 +1,10 @@
 using System;
 using System.Buffers;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using DirectXTexSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,10 +14,10 @@ namespace Tests
     public class ConversionTests
     {
         const string ddsPath = @"X:\cp77\TEMP\rain_normal.dds";
+        const string infolder = @"X:\cp77\ASSETS\basegame_1_engine";
 
 
         public delegate void SpanAction(ReadOnlySpan<byte> vs);
-
         public void ReadAndProcessFile(string path, SpanAction action)
         {
             byte[] rentedBuffer = null;
@@ -23,7 +26,7 @@ namespace Tests
                 int len;
                 var offset = 0;
 
-                using (var stream = File.OpenRead(ddsPath))
+                using (var stream = File.OpenRead(path))
                 {
                     len = checked((int)stream.Length);
                     rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
@@ -101,30 +104,55 @@ namespace Tests
         [DataRow(ESaveFileTypes.TIFF)]
         public unsafe void TestConvertDdsFile(ESaveFileTypes filetype)
         {
-            ReadAndProcessFile(ddsPath, ProcessSpan);
+            
+            var files = Directory.GetFiles(infolder, "*.dds", SearchOption.AllDirectories);
 
-            void ProcessSpan(ReadOnlySpan<byte> span)
+            var succesfull = 0;
+
+            Parallel.ForEach(files, item =>
+            //foreach (var item in files)
             {
-                fixed (byte* ptr = span)
+                ReadAndProcessFile(item, ProcessSpan);
+
+                void ProcessSpan(ReadOnlySpan<byte> span)
                 {
-                    var outDir = Path.Combine( new FileInfo(ddsPath).Directory.FullName, "out");
-                    Directory.CreateDirectory(outDir);
-                    var fileName = Path.GetFileNameWithoutExtension(ddsPath);
-                    var extension = filetype.ToString().ToLower();
-                    var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
+                    fixed (byte* ptr = span)
+                    {
+                        var len = span.Length;
 
-                    var len = span.Length;
+                        //var buffer = DirectXTexSharp.Texconv.ConvertDdsImageToArray(ptr, len, filetype, false, false);
+                        //if (buffer != null)
+                        //{
+                        //    succesfull++;
+                        //}
+                        //else
+                        //{
+                        //    Debug.WriteLine($"[{filetype.ToString()}] - {item}");
+                        //}
+                        //buffer = null;
 
-                    // test direct saving
-                    DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, len, newpath, filetype, false, false);
+                        var outDir = new FileInfo(item).Directory.FullName;
+                        Directory.CreateDirectory(outDir);
+                        var fileName = Path.GetFileNameWithoutExtension(item);
+                        var extension = filetype.ToString().ToLower();
+                        var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
-                    // test buffer saving
-                    var buffer = DirectXTexSharp.Texconv.ConvertDdsImageToArray(ptr, len, filetype, false, false);
-                    var newpath2 = Path.Combine(outDir, $"{fileName}.2.{extension}");
-                    File.WriteAllBytes(newpath2, buffer);
-
+                        var hr = DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, len, newpath, filetype, false, false);
+                        if (hr == 0)
+                        {
+                            Interlocked.Increment(ref succesfull);
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"[{filetype.ToString()}] - {item}");
+                        }
+                    }
                 }
-            } 
+
+            }
+            );
+
+            Assert.AreEqual(files.Length, succesfull);
         }
     }
 }

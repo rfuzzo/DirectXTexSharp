@@ -354,8 +354,19 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texconv::ConvertDdsMemor
     // Color rotation
     // Tonemap
 
-    // Convert
     // Convert NormalMaps
+
+
+    // Convert
+    if (filetype == DirectXTexSharp::ESaveFileTypes::TGA ||
+        filetype == DirectXTexSharp::ESaveFileTypes::PNG ||
+        filetype == DirectXTexSharp::ESaveFileTypes::JPEG ||
+        filetype == DirectXTexSharp::ESaveFileTypes::BMP ||
+        filetype == DirectXTexSharp::ESaveFileTypes::TIFF)
+    {
+        tformat = DXGI_FORMAT_R8G8B8A8_UNORM;
+    }
+
     if (info.format != tformat && !DirectX::IsCompressed(tformat))
     {
         std::unique_ptr<DirectX::ScratchImage> timage(new (std::nothrow) DirectX::ScratchImage);
