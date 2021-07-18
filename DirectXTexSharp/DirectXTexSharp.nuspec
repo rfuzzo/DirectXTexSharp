@@ -16,11 +16,11 @@
     <!-- Include everything in \build -->
     <file src="build\**" target="build" />
 
-    <file src="bin\x64\$CConfiguration$\DirectXTexSharp.dll" target="runtimes\win-x64\native" />
-    <file src="bin\x64\$CConfiguration$\Ijwhost.dll" target="runtimes\win-x64\native" />
+    <file src="bin\x64\$CConfiguration$\*.dll" target="runtimes\win-x64\native" />
+    <!--file src="bin\x64\$CConfiguration$\Ijwhost.dll" target="runtimes\win-x64\native" /-->
 
-    <file src="bin\win32\$CConfiguration$\DirectXTexSharp.dll" target="runtimes\win-x86\native" />
-    <file src="bin\win32\$CConfiguration$\Ijwhost.dll" target="runtimes\win-x86\native" />
+    <file src="bin\win32\$CConfiguration$\*.dll" target="runtimes\win-x86\native" />
+    <!--file src="bin\win32\$CConfiguration$\Ijwhost.dll" target="runtimes\win-x86\native" /-->
   </files>
 
 </package>

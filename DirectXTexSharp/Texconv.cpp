@@ -11,7 +11,7 @@ using namespace DirectXTexSharp;
 //HRESULT __cdecl SaveToTGAMemory(_In_ const Image & image,
 //	_In_ TGA_FLAGS flags,
 //	_Out_ Blob & blob, _In_opt_ const TexMetadata * metadata = nullptr) noexcept;
-int DirectXTexSharp::Texcconv::ConvertAndSaveDdsImage(
+int DirectXTexSharp::Texconv::ConvertAndSaveDdsImage(
     byte* bytePtr,
     int len,
 	System::String^ szFile,
@@ -115,7 +115,7 @@ int DirectXTexSharp::Texcconv::ConvertAndSaveDdsImage(
     return 0;
 }
 
-array<System::Byte>^ DirectXTexSharp::Texcconv::ConvertDdsImageToArray(byte* bytePtr, int len, DirectXTexSharp::ESaveFileTypes filetype, bool vflip, bool hflip)
+array<System::Byte>^ DirectXTexSharp::Texconv::ConvertDdsImageToArray(byte* bytePtr, int len, DirectXTexSharp::ESaveFileTypes filetype, bool vflip, bool hflip)
 {
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
@@ -225,7 +225,7 @@ array<System::Byte>^ DirectXTexSharp::Texcconv::ConvertDdsImageToArray(byte* byt
 
 // private
 
-std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texcconv::ConvertDdsMemory(
+std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texconv::ConvertDdsMemory(
     byte* bytePtr, 
     int len, 
     DirectXTexSharp::ESaveFileTypes filetype, 
@@ -440,7 +440,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texcconv::ConvertDdsMemo
 }
 
 
-void DirectXTexSharp::Texcconv::GetWicPropsJpg(IPropertyBag2* props)
+void DirectXTexSharp::Texconv::GetWicPropsJpg(IPropertyBag2* props)
 {
     bool wicLossless = true;
     float wicQuality = -1.f;
@@ -456,7 +456,7 @@ void DirectXTexSharp::Texcconv::GetWicPropsJpg(IPropertyBag2* props)
     }
 }
 
-void DirectXTexSharp::Texcconv::GetWicPropsTiff(IPropertyBag2* props)
+void DirectXTexSharp::Texconv::GetWicPropsTiff(IPropertyBag2* props)
 {
     bool wicLossless = true;
     float wicQuality = -1.f;

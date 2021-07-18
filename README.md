@@ -30,10 +30,10 @@ fixed (byte* ptr = span)
     var len = span.Length;
 
     // test direct saving
-    DirectXTexSharp.Texcconv.ConvertAndSaveDdsImage(ptr, len, newpath, filetype, false, false);
+    DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, len, newpath, filetype, false, false);
 
     // test buffer saving
-    var buffer = DirectXTexSharp.Texcconv.ConvertDdsImageToArray(ptr, len, filetype, false, false);
+    var buffer = DirectXTexSharp.Texconv.ConvertDdsImageToArray(ptr, len, filetype, false, false);
     var newpath2 = Path.Combine(outDir, $"{fileName}.2.{extension}");
     File.WriteAllBytes(newpath2, buffer);
 

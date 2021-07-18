@@ -11,7 +11,7 @@ using namespace System::Runtime::InteropServices;
 
 namespace DirectXTexSharp {
 
-	public ref class Texcconv sealed
+	public ref class Texconv sealed
 	{
 	public:
 		static int ConvertAndSaveDdsImage(
@@ -30,8 +30,8 @@ namespace DirectXTexSharp {
 			bool hflip);
 
 	private:
-		static void DirectXTexSharp::Texcconv::GetWicPropsJpg(IPropertyBag2* props);
-		static void DirectXTexSharp::Texcconv::GetWicPropsTiff(IPropertyBag2* props);
+		static void DirectXTexSharp::Texconv::GetWicPropsJpg(IPropertyBag2* props);
+		static void DirectXTexSharp::Texconv::GetWicPropsTiff(IPropertyBag2* props);
 
 		static std::unique_ptr<DirectX::ScratchImage>  ConvertDdsMemory(
 			byte* bytePtr,
