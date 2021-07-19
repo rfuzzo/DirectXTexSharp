@@ -10,8 +10,83 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\chicken_brown_d.bmp" />
+    <None Remove="Assets\chicken_brown_d.dds" />
+    <None Remove="Assets\chicken_brown_d.jpeg" />
+    <None Remove="Assets\chicken_brown_d.png" />
+    <None Remove="Assets\chicken_brown_d.tga" />
+    <None Remove="Assets\chicken_brown_d.tiff" />
+    <None Remove="Assets\chicken_brown_n.bmp" />
+    <None Remove="Assets\chicken_brown_n.dds" />
+    <None Remove="Assets\chicken_brown_n.jpeg" />
+    <None Remove="Assets\chicken_brown_n.png" />
+    <None Remove="Assets\chicken_brown_n.tga" />
+    <None Remove="Assets\chicken_brown_n.tiff" />
+    <None Remove="Assets\chicken_brown_opacity_d.bmp" />
+    <None Remove="Assets\chicken_brown_opacity_d.dds" />
+    <None Remove="Assets\chicken_brown_opacity_d.jpeg" />
+    <None Remove="Assets\chicken_brown_opacity_d.png" />
+    <None Remove="Assets\chicken_brown_opacity_d.tga" />
+    <None Remove="Assets\chicken_brown_opacity_d.tiff" />
     <None Remove="ConversionTests" />
     <None Remove="IOTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\chicken_brown_d.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_d.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_d.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_d.tga">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_d.tiff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_n.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_n.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_n.tga">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_n.tiff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_opacity_d.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_opacity_d.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_opacity_d.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_opacity_d.tga">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_opacity_d.tiff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Assets\chicken_brown_d.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\chicken_brown_n.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Assets\chicken_brown_n.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\chicken_brown_opacity_d.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

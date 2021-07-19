@@ -22,21 +22,34 @@ namespace DirectXTexSharp {
 			bool vflip, 
 			bool hflip);
 
-		static array<System::Byte>^ ConvertDdsImageToArray(
+		static array<System::Byte>^ ConvertFromDdsArray(
 			byte* bytePtr,
 			int len,
 			DirectXTexSharp::ESaveFileTypes filetype,
 			bool vflip,
 			bool hflip);
 
-	private:
-		static void DirectXTexSharp::Texconv::GetWicPropsJpg(IPropertyBag2* props);
-		static void DirectXTexSharp::Texconv::GetWicPropsTiff(IPropertyBag2* props);
-
-		static std::unique_ptr<DirectX::ScratchImage>  ConvertDdsMemory(
+		static array<System::Byte>^ ConvertToDdsArray(
 			byte* bytePtr,
 			int len,
 			DirectXTexSharp::ESaveFileTypes filetype,
+			DirectXTexSharp::DXGI_FORMAT_WRAPPED format,
+			bool vflip,
+			bool hflip);
+
+	private:
+		static std::unique_ptr<DirectX::ScratchImage>  ConvertFromDdsMemory(
+			byte* bytePtr,
+			int len,
+			DirectXTexSharp::ESaveFileTypes filetype,
+			bool vflip,
+			bool hflip);
+
+		static DirectX::Blob  ConvertToDdsMemory(
+			byte* bytePtr,
+			int len,
+			DirectXTexSharp::ESaveFileTypes filetype,
+			DXGI_FORMAT format,
 			bool vflip,
 			bool hflip);
 

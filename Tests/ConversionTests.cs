@@ -13,8 +13,7 @@ namespace Tests
     [TestClass]
     public class ConversionTests
     {
-        const string ddsPath = @"X:\cp77\TEMP\rain_normal.dds";
-        const string infolder = @"X:\cp77\ASSETS\basegame_1_engine";
+        const string infolder = @".\Assets";
 
 
         public delegate void SpanAction(ReadOnlySpan<byte> vs);
@@ -54,7 +53,9 @@ namespace Tests
 
 
         [TestMethod]
-        public unsafe void TestDecompress()
+        [DataRow(@".\Assets\chicken_brown_d.dds")]
+        [DataRow(@".\Assets\chicken_brown_n.dds")]
+        public unsafe void TestDecompress(string ddsPath)
         {
             ReadAndProcessFile(ddsPath, ProcessSpan);
 
@@ -85,9 +86,6 @@ namespace Tests
                         ))
                         {
                             Assert.IsNotNull(newscratchImage);
-
-
-
                         }
                     }
                 }
@@ -99,18 +97,16 @@ namespace Tests
         [DataRow(ESaveFileTypes.TGA)]
         [DataRow(ESaveFileTypes.PNG)]
         [DataRow(ESaveFileTypes.JPEG)]
-        //[DataRow(ESaveFileTypes.HDR)] // not working, disabled
         [DataRow(ESaveFileTypes.BMP)]
         [DataRow(ESaveFileTypes.TIFF)]
-        public unsafe void TestConvertDdsFile(ESaveFileTypes filetype)
+        public unsafe void TestConvertFromDdsFile(ESaveFileTypes filetype)
         {
-            
             var files = Directory.GetFiles(infolder, "*.dds", SearchOption.AllDirectories);
 
             var succesfull = 0;
 
-            Parallel.ForEach(files, item =>
-            //foreach (var item in files)
+            //Parallel.ForEach(files, item =>
+            foreach (var item in files)
             {
                 ReadAndProcessFile(item, ProcessSpan);
 
@@ -120,37 +116,81 @@ namespace Tests
                     {
                         var len = span.Length;
 
-                        //var buffer = DirectXTexSharp.Texconv.ConvertDdsImageToArray(ptr, len, filetype, false, false);
-                        //if (buffer != null)
-                        //{
-                        //    succesfull++;
-                        //}
-                        //else
-                        //{
-                        //    Debug.WriteLine($"[{filetype.ToString()}] - {item}");
-                        //}
-                        //buffer = null;
-
-                        var outDir = new FileInfo(item).Directory.FullName;
-                        Directory.CreateDirectory(outDir);
-                        var fileName = Path.GetFileNameWithoutExtension(item);
-                        var extension = filetype.ToString().ToLower();
-                        var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
-
-                        var hr = DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, len, newpath, filetype, false, false);
-                        if (hr == 0)
+                        var buffer = DirectXTexSharp.Texconv.ConvertFromDdsArray(ptr, len, filetype, false, false);
+                        if (buffer != null)
                         {
-                            Interlocked.Increment(ref succesfull);
+                            succesfull++;
                         }
                         else
                         {
                             Debug.WriteLine($"[{filetype.ToString()}] - {item}");
                         }
+                        buffer = null;
+
+                        //var outDir = new FileInfo(item).Directory.FullName;
+                        //Directory.CreateDirectory(outDir);
+                        //var fileName = Path.GetFileNameWithoutExtension(item);
+                        //var extension = filetype.ToString().ToLower();
+                        //var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
+
+                        //var hr = DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, len, newpath, filetype, false, false);
+                        //if (hr == 0)
+                        //{
+                        //    Interlocked.Increment(ref succesfull);
+                        //}
+                        //else
+                        //{
+                        //    Debug.WriteLine($"[{filetype.ToString()}] - {item}");
+                        //}
                     }
                 }
 
             }
-            );
+            //);
+
+            Assert.AreEqual(files.Length, succesfull);
+        }
+
+        [TestMethod]
+        [DataRow(ESaveFileTypes.TGA)]
+        [DataRow(ESaveFileTypes.PNG)]
+        [DataRow(ESaveFileTypes.JPEG)]
+        [DataRow(ESaveFileTypes.BMP)]
+        [DataRow(ESaveFileTypes.TIFF)]
+        public unsafe void TestConvertToDdsFile(ESaveFileTypes filetype)
+        {
+            var files = Directory.GetFiles(infolder, $"*.{filetype.ToString().ToLower()}", SearchOption.AllDirectories);
+
+            var succesfull = 0;
+
+            //Parallel.ForEach(files, item =>
+            foreach (var item in files)
+            {
+                ReadAndProcessFile(item, ProcessSpan);
+
+                void ProcessSpan(ReadOnlySpan<byte> span)
+                {
+                    fixed (byte* ptr = span)
+                    {
+                        var len = span.Length;
+                        var format = DXGI_FORMAT_WRAPPED.DXGI_FORMAT_B8G8R8A8_UNORM;
+                        
+
+                        var buffer = DirectXTexSharp.Texconv.ConvertToDdsArray(ptr, len, filetype, format, false, false);
+                        if (buffer != null && buffer.Length > 0)
+                        {
+                            succesfull++;
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"[{filetype.ToString()}] - {item}");
+                        }
+                        buffer = null;
+                    }
+                }
+
+            }
+            //);
 
             Assert.AreEqual(files.Length, succesfull);
         }
