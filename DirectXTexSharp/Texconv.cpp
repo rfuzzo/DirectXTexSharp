@@ -594,14 +594,17 @@ DirectX::Blob DirectXTexSharp::Texconv::ConvertToDdsMemory(
     }
     case DirectXTexSharp::ESaveFileTypes::BMP:
     {
-       /* hr = DirectX::LoadFromBMPEx(pConv->szSrc, DirectX::WIC_FLAGS_NONE | dwFilter, &info, *image);
+           
+        hr = DirectX::LoadFromWICMemory(bytePtr, len, DirectX::WIC_FLAGS_NONE, &info, *image);
         if (FAILED(hr))
         {
             wprintf(L" FAILED (%08X%ls)\n", static_cast<unsigned int>(hr), GetErrorDesc(hr));
             System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
-        }*/
-        return blob;
-        //break;
+            //hr = DirectX::LoadFromExtendedBMPMemory(bmpData.get(), bmpSize, metadata, image);
+        }
+
+
+        break;
     }
     default:
     {
