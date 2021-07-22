@@ -562,7 +562,7 @@ DirectX::Blob DirectXTexSharp::Texconv::ConvertToDdsMemory(
     bool hflip)
 {
     // defaults
-    size_t mipLevels = 1; // since we're converting FROM non-dds images
+    size_t mipLevels = 0; // since we're converting FROM non-dds images
     bool non4bc = false;
     DirectX::TEX_FILTER_FLAGS dwFilter = DirectX::TEX_FILTER_DEFAULT;
     DirectX::TEX_FILTER_FLAGS dwSRGB = DirectX::TEX_FILTER_DEFAULT;

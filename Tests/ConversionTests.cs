@@ -185,6 +185,14 @@ namespace Tests
                         {
                             Debug.WriteLine($"[{filetype.ToString()}] - {item}");
                         }
+
+                        // write to file
+                        var outdir = Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "directxtexsharp");
+                        Directory.CreateDirectory(outdir);
+                        var test = Path.Combine(outdir, $"{Path.GetFileName(item)}.dds");
+                        File.WriteAllBytes(test, buffer);
+
+
                         buffer = null;
                     }
                 }
