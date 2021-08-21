@@ -40,62 +40,62 @@ namespace DirectXTexSharp {
 			TexMetadata();
 			TexMetadata(DirectX::TexMetadata& metadata);
 
-    	property int width {
+    	property std::size_t width {
     		public:
-    		int get() {
+    		std::size_t get() {
 	            return m_instance_->width;
 	        }
 	    }
-	    property int height {
+	    property std::size_t height {
 			public:
-	        int get() {
+	        std::size_t get() {
 	            return m_instance_->height;
 	        }
-	        }
-	    property int depth {
+	    }
+	    property std::size_t depth {
 			public:
-	        int get() {
+	        std::size_t get() {
 	            return m_instance_->depth;
 	        }
-	        }
-	    property int arraySize {
+	    }
+	    property std::size_t arraySize {
 			public:
-	        int get() {
+	        std::size_t get() {
 	            return m_instance_->arraySize;
 	        }
-	        }
-	    property int mipLevels {
+	    }
+	    property std::size_t mipLevels {
 			public:
-	        int get() {
+	        std::size_t get() {
 	            return m_instance_->mipLevels;
 	        }
-	        }
+	    }
 	    property UINT32 miscFlags {
 			public:
 	        UINT32 get() {
 	            return m_instance_->miscFlags;
 	        }
-	        }
+	    }
 	    property UINT32 miscFlags2 {
 			public:
 	        UINT32 get() {
 	            return m_instance_->miscFlags2;
 	        }
-	        }
+	    }
 	    property DirectXTexSharp::DXGI_FORMAT_WRAPPED format {
 			public:
 				DirectXTexSharp::DXGI_FORMAT_WRAPPED get() {
-	            return static_cast<DirectXTexSharp::DXGI_FORMAT_WRAPPED>(m_instance_->format);
+					return static_cast<DirectXTexSharp::DXGI_FORMAT_WRAPPED>(m_instance_->format);
 				}
 				void set(DirectXTexSharp::DXGI_FORMAT_WRAPPED value) {
 					m_instance_->format = static_cast<DXGI_FORMAT>(value);
 				}
-	        }
+	    }
 	    property DirectXTexSharp::TEX_DIMENSION dimension {
 			public:
 				DirectXTexSharp::TEX_DIMENSION get() {
-	            return static_cast<DirectXTexSharp::TEX_DIMENSION>(m_instance_->dimension);
-	        }
+					return static_cast<DirectXTexSharp::TEX_DIMENSION>(m_instance_->dimension);
+				}
         }
     };
 }
