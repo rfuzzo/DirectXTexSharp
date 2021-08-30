@@ -62,10 +62,10 @@ namespace DirectXTexSharp {
 	        TexMetadata^ GetMetadata();
 
             array<byte>^ GetPixels();
-	        int GetPixelsSize();
+	        std::size_t GetPixelsSize();
 
 	        Image^ GetImages();
-            int GetImageCount();
+            std::size_t GetImageCount();
 
 	};
 }

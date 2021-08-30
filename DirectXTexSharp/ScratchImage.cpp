@@ -23,7 +23,7 @@ array<byte>^ ScratchImage::GetPixels()
 	auto dataSize = this->GetPixelsSize();
 	auto ptr = m_instance_->GetPixels();
 
-	array<byte>^ _Data = gcnew array<byte>(dataSize);
+	array<byte>^ _Data = gcnew array<byte>(int(dataSize));
 
 	for (int i = 0; i < _Data->Length; ++i)
 		_Data[i] = ptr[i];
@@ -31,7 +31,7 @@ array<byte>^ ScratchImage::GetPixels()
 	return _Data;
 }
 
-int ScratchImage::GetPixelsSize()
+std::size_t ScratchImage::GetPixelsSize()
 {
 	return m_instance_->GetPixelsSize();
 }
@@ -43,7 +43,7 @@ Image^ ScratchImage::GetImages()
 	return gcnew DirectXTexSharp::Image(*native_image_ptr);
 }
 
-int DirectXTexSharp::ScratchImage::GetImageCount()
+std::size_t DirectXTexSharp::ScratchImage::GetImageCount()
 {
 	return m_instance_->GetImageCount();
 }

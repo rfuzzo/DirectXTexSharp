@@ -22,15 +22,15 @@ namespace DirectXTexSharp {
         //Image(DirectX::Image* image);
         Image(DirectX::Image& image);
 
-        property int width {
+        property std::size_t width {
         	public:
-        		int get() {
+        		std::size_t get() {
         			return m_instance_->width;
         		}
         	}
-        property int height {
+        property std::size_t height {
         	public:
-        		int get() {
+        		std::size_t get() {
         		return m_instance_->height;
         		}
         	}
@@ -40,15 +40,15 @@ namespace DirectXTexSharp {
         		return static_cast<DirectXTexSharp::DXGI_FORMAT_WRAPPED>(m_instance_->format);
         		}
         	}
-        property int rowPitch {
+        property std::size_t rowPitch {
         	public:
-        		int get() {
+        		std::size_t get() {
         			return m_instance_->rowPitch;
         		}
         	}
-        property int slicePitch {
+        property std::size_t slicePitch {
         	public:
-        		int get() {
+        		std::size_t get() {
         			return m_instance_->slicePitch;
         		}
         	}

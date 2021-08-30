@@ -152,7 +152,7 @@ int DirectXTexSharp::Texconv::ConvertAndSaveDdsImage(
     }
     case DirectXTexSharp::ESaveFileTypes::PNG:
     {
-        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_PNG;
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICFile(
@@ -167,7 +167,7 @@ int DirectXTexSharp::Texconv::ConvertAndSaveDdsImage(
     }
     case DirectXTexSharp::ESaveFileTypes::BMP:
     {
-        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_BMP;
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICFile(
@@ -185,7 +185,7 @@ int DirectXTexSharp::Texconv::ConvertAndSaveDdsImage(
 
     if (FAILED(hr))
     {
-        wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr));
+        wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
         return 1;
     }
 
@@ -258,7 +258,7 @@ array<System::Byte>^ DirectXTexSharp::Texconv::ConvertFromDdsArray(
     }
     case DirectXTexSharp::ESaveFileTypes::PNG:
     {
-        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_PNG;
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICMemory(
@@ -273,7 +273,7 @@ array<System::Byte>^ DirectXTexSharp::Texconv::ConvertFromDdsArray(
     }
     case DirectXTexSharp::ESaveFileTypes::BMP:
     {
-        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_TIFF;
+        DirectX::WICCodecs codec = DirectX::WICCodecs::WIC_CODEC_BMP;
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICMemory(
@@ -291,14 +291,14 @@ array<System::Byte>^ DirectXTexSharp::Texconv::ConvertFromDdsArray(
 
     if (FAILED(hr))
     {
-        wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr));
+        wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
         System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
     }
 
     // copy buffer
     auto len_buffer = blob.GetBufferSize();
     auto buffer = static_cast<uint8_t*>(blob.GetBufferPointer());
-    array<byte>^ _Data = gcnew array<byte>(len_buffer);
+    array<byte>^ _Data = gcnew array<byte>(int(len_buffer));
 
     for (int i = 0; i < _Data->Length; ++i)
         _Data[i] = buffer[i];
@@ -321,7 +321,7 @@ array<System::Byte>^ DirectXTexSharp::Texconv::ConvertToDdsArray(
     //copy buffer
     auto len_buffer = blob.GetBufferSize();
     auto buffer = static_cast<uint8_t*>(blob.GetBufferPointer());
-    array<byte>^ _Data = gcnew array<byte>(len_buffer);
+    array<byte>^ _Data = gcnew array<byte>(int(len_buffer));
 
     for (int i = 0; i < _Data->Length; ++i)
         _Data[i] = buffer[i];
@@ -359,7 +359,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texconv::ConvertFromDdsM
     hr = DirectX::LoadFromDDSMemory(bytePtr, len, ddsFlags, &info, *image);
     if (FAILED(hr))
     {
-        wprintf(L" FAILED (%08X%ls)\n", static_cast<unsigned int>(hr));
+        wprintf(L" FAILED (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
         System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
     }
 
@@ -391,7 +391,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texconv::ConvertFromDdsM
         auto hr = DirectX::Decompress(img, nimg, info, DXGI_FORMAT_UNKNOWN /* picks good default */, *timage);
         if (FAILED(hr))
         {
-            wprintf(L" FAILED [decompress] (%08X%ls)\n", static_cast<unsigned int>(hr));
+            wprintf(L" FAILED [decompress] (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
             System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
         }
 
@@ -434,7 +434,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texconv::ConvertFromDdsM
         auto hr = FlipRotate(image->GetImages(), image->GetImageCount(), image->GetMetadata(), dwFlags, *timage);
         if (FAILED(hr))
         {
-            wprintf(L" FAILED [fliprotate] (%08X%ls)\n", static_cast<unsigned int>(hr));
+            wprintf(L" FAILED [fliprotate] (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
             System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
         }
 
@@ -487,7 +487,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texconv::ConvertFromDdsM
             dwFilter | dwFilterOpts | dwSRGB | dwConvert, alphaThreshold, *timage);
         if (FAILED(hr))
         {
-            wprintf(L" FAILED [convert] (%08X%ls)\n", static_cast<unsigned int>(hr));
+            wprintf(L" FAILED [convert] (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
             System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
         }
 
@@ -1089,7 +1089,7 @@ DirectX::Blob DirectXTexSharp::Texconv::ConvertToDdsMemory(
 
     if (FAILED(hr))
     {
-        wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr));
+        wprintf(L"Failed to initialize COM (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
         System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
     }
 
