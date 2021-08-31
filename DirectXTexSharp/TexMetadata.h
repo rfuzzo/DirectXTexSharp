@@ -40,6 +40,9 @@ namespace DirectXTexSharp {
 			TexMetadata();
 			TexMetadata(DirectX::TexMetadata& metadata);
 
+        public:
+            bool is_cubemap() { return m_instance_->IsCubemap(); }
+
     	property std::size_t width {
     		public:
     		std::size_t get() {

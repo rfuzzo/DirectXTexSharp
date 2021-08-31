@@ -55,6 +55,29 @@ namespace DirectXTexSharp {
 
 	};
 
+    /*public ref class Format sealed
+    {
+    public:
+        static DirectXTexSharp::TexMetadata^ ComputePitch(
+            DirectXTexSharp::DXGI_FORMAT_WRAPPED format,
+            const long width,
+            const long height,
+            [System::Runtime::InteropServices::OutAttribute] long% rowPitch,
+            [System::Runtime::InteropServices::OutAttribute] long% slicePitch
+        )
+        {
+            const auto result = DirectX::ComputePitch(
+                static_cast<__dxgiformat_h__::DXGI_FORMAT> (format),
+                static_cast<size_t>(width),
+                static_cast<size_t>(height),
+                rowPitch,
+                *slicePitch
+                );
+            System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
+        }
+
+       
+    };*/
 
 	public ref class Metadata sealed
 	{
@@ -64,7 +87,7 @@ namespace DirectXTexSharp {
 			DirectXTexSharp::DDSFLAGS flags);
 
 		static DirectXTexSharp::TexMetadata^ GetMetadataFromDDSMemory(
-			IntPtr^ pSource,
+            byte* pSource,
 			int size,
 			DirectXTexSharp::DDSFLAGS flags);
 	};

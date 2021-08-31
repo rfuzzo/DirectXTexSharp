@@ -36,13 +36,13 @@ DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSFile(
 //	_In_ DDS_FLAGS flags,
 //	_Out_ TexMetadata& metadata) noexcept;
 DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSMemory(
-	System::IntPtr^ pSource,
+	byte* pSource,
 	const int size,
 	DirectXTexSharp::DDSFLAGS flags) {
 
 	DirectX::TexMetadata metadata;
 	const auto result = DirectX::GetMetadataFromDDSMemory(
-		static_cast<void*>(*pSource),
+        pSource,
 		size,
 		static_cast<DirectX::DDS_FLAGS> (flags),
 		metadata);
