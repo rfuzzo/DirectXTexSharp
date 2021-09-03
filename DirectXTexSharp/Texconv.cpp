@@ -1099,7 +1099,6 @@ DirectX::Blob DirectXTexSharp::Texconv::ConvertToDdsMemory(
 }
 
 
-
 //_Success_(return != false)
 //bool CreateDevice(int adapter, _Outptr_ ID3D11Device * *pDevice)
 //{

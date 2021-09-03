@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Conversion.cpp" />
+    <ClCompile Include="Format.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="Metadata.cpp" />

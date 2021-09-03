@@ -55,29 +55,32 @@ namespace DirectXTexSharp {
 
 	};
 
-    /*public ref class Format sealed
+    public ref class Format sealed
     {
     public:
-        static DirectXTexSharp::TexMetadata^ ComputePitch(
+        /*HRESULT __cdecl ComputePitch(
+            _In_ DXGI_FORMAT fmt, _In_ size_t width, _In_ size_t height,
+            _Out_ size_t& rowPitch, _Out_ size_t& slicePitch, _In_ CP_FLAGS flags = CP_FLAGS_NONE) noexcept;*/
+        /*static void ComputePitch(
             DirectXTexSharp::DXGI_FORMAT_WRAPPED format,
             const long width,
             const long height,
             [System::Runtime::InteropServices::OutAttribute] long% rowPitch,
             [System::Runtime::InteropServices::OutAttribute] long% slicePitch
-        )
-        {
-            const auto result = DirectX::ComputePitch(
-                static_cast<__dxgiformat_h__::DXGI_FORMAT> (format),
-                static_cast<size_t>(width),
-                static_cast<size_t>(height),
-                rowPitch,
-                *slicePitch
-                );
-            System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
-        }
+        );*/
 
-       
-    };*/
+        static long ComputeRowPitch(
+            DirectXTexSharp::DXGI_FORMAT_WRAPPED format,
+            const long width,
+            const long height);
+
+        static long ComputeSlicePitch(
+            DirectXTexSharp::DXGI_FORMAT_WRAPPED format,
+            const long width,
+            const long height);
+
+        static long BitsPerPixel(DirectXTexSharp::DXGI_FORMAT_WRAPPED format);
+    };
 
 	public ref class Metadata sealed
 	{
@@ -85,6 +88,10 @@ namespace DirectXTexSharp {
 		static DirectXTexSharp::TexMetadata^ GetMetadataFromDDSFile(
 			System::String^ szFile,
 			DirectXTexSharp::DDSFLAGS flags);
+
+        static DirectXTexSharp::TexMetadata^ GetMetadataFromTGAFile(
+            System::String^ szFile,
+            DirectXTexSharp::TGA_FLAGS flags);
 
 		static DirectXTexSharp::TexMetadata^ GetMetadataFromDDSMemory(
             byte* pSource,

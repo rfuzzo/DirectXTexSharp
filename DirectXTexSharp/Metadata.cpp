@@ -50,6 +50,25 @@ DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromDDSMemor
 	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
 
 	return gcnew DirectXTexSharp::TexMetadata(metadata);
+}
+
+//HRESULT __cdecl GetMetadataFromTGAFile(
+//    _In_z_ const wchar_t* szFile,
+//    _In_ TGA_FLAGS flags,
+//    _Out_ TexMetadata& metadata) noexcept;
+DirectXTexSharp::TexMetadata^ DirectXTexSharp::Metadata::GetMetadataFromTGAFile(
+	System::String^ szFile,
+	DirectXTexSharp::TGA_FLAGS flags) {
 	
-	
+	msclr::interop::marshal_context context;
+
+	DirectX::TexMetadata metadata;
+	const auto result = DirectX::GetMetadataFromTGAFile(
+		context.marshal_as<const wchar_t*>(szFile),
+		static_cast<DirectX::TGA_FLAGS> (flags),
+		metadata);
+
+	System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(result);
+
+	return gcnew DirectXTexSharp::TexMetadata(metadata);
 }

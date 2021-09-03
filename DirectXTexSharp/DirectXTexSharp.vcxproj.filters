@@ -83,6 +83,9 @@
     <ClCompile Include="Texconv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Format.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
