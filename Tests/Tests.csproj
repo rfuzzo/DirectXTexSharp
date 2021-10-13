@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <IsPackable>false</IsPackable>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <Platforms>x64;x86</Platforms>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
   </PropertyGroup>
@@ -97,11 +97,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp.vcxproj" />
+    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp_2022.vcxproj" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp.vcxproj" />
-  </ItemGroup>-->
 
 </Project>
