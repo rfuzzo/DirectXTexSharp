@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{44FFFFA9-F1E3-473E-AD4A-7BF36A4E19B8}</ProjectGuid>
+    <ProjectGuid>{71A3A167-0E05-4940-B3FF-BE0F68A66948}</ProjectGuid>
     <Keyword>NetCoreCProj</Keyword>
     <RootNamespace>DirectXTexSharp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
