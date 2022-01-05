@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{71A3A167-0E05-4940-B3FF-BE0F68A66948}</ProjectGuid>
     <Keyword>NetCoreCProj</Keyword>
     <RootNamespace>DirectXTexSharp</RootNamespace>
