@@ -567,7 +567,7 @@ DirectX::Blob DirectXTexSharp::Texconv::ConvertToDdsMemory(
     DirectX::TEX_FILTER_FLAGS dwFilter = DirectX::TEX_FILTER_DEFAULT;
     DirectX::TEX_FILTER_FLAGS dwSRGB = DirectX::TEX_FILTER_DEFAULT;
     DirectX::TEX_FILTER_FLAGS dwConvert = DirectX::TEX_FILTER_DEFAULT;
-    DirectX::TEX_COMPRESS_FLAGS dwCompress = DirectX::TEX_COMPRESS_DEFAULT;
+    DirectX::TEX_COMPRESS_FLAGS dwCompress = DirectX::TEX_COMPRESS_PARALLEL; //TEX_COMPRESS_PARALLEL, TEX_COMPRESS_DEFAULT
     DirectX::TEX_FILTER_FLAGS dwFilterOpts = DirectX::TEX_FILTER_DEFAULT;
     float alphaThreshold = DirectX::TEX_THRESHOLD_DEFAULT;
     bool preserveAlphaCoverage = false;
