@@ -1,8 +1,13 @@
 #pragma once
 
+#define IS_CLR (_MANAGED == 1) || (_M_CEE == 1)
+
 namespace DirectXTexSharp {
 
-    public enum class DDSFLAGS : unsigned long
+#if IS_CLR
+    public
+#endif
+    enum class DDSFLAGS : unsigned long
     {
         DDS_FLAGS_NONE = 0x0,
 
@@ -40,7 +45,10 @@ namespace DirectXTexSharp {
         // Enables the loader to read large dimension .dds files (i.e. greater than known hardware requirements)
     };
 
-    public enum class TGA_FLAGS : unsigned long
+#if IS_CLR
+    public
+#endif
+    enum class TGA_FLAGS : unsigned long
     {
         TGA_FLAGS_NONE = 0x0,
 
@@ -63,7 +71,10 @@ namespace DirectXTexSharp {
         // If no colorspace is specified in TGA 2.0 metadata, assume sRGB
     };
 
-    public enum class WIC_FLAGS : unsigned long
+#if IS_CLR
+    public
+#endif
+    enum class WIC_FLAGS : unsigned long
     {
         WIC_FLAGS_NONE = 0x0,
 
@@ -107,7 +118,10 @@ namespace DirectXTexSharp {
             // Filtering mode to use for any required image resizing (only needed when loading arrays of differently sized images; defaults to Fant)
     };
 
-    public enum class TEX_DIMENSION
+#if IS_CLR
+    public
+#endif
+    enum class TEX_DIMENSION
         // Subset here matches D3D10_RESOURCE_DIMENSION and D3D11_RESOURCE_DIMENSION
     {
         TEX_DIMENSION_TEXTURE1D = 2,
@@ -115,7 +129,10 @@ namespace DirectXTexSharp {
         TEX_DIMENSION_TEXTURE3D = 4,
     };
 
-    public enum class TEX_FILTER_FLAGS : unsigned long
+#if IS_CLR
+    public
+#endif
+    enum class TEX_FILTER_FLAGS : unsigned long
     {
         TEX_FILTER_DEFAULT = 0,
 
@@ -190,7 +207,10 @@ namespace DirectXTexSharp {
     //    { nullptr,  CODEC_DDS      }
     //};
 
-    public enum class ESaveFileTypes
+#if IS_CLR
+    public
+#endif
+    enum class ESaveFileTypes
     {
         BMP,
         JPEG,
