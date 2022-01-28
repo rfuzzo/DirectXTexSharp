@@ -19,6 +19,8 @@
 #if defined(_MSC_VER)
 #include <Windows.h>
 #include <intrin.h>
+#include <dxgiformat.h>
+
 #undef max
 #undef min
 #else
@@ -73,6 +75,8 @@
     #pragma warning Unknown dynamic link import/export semantics.
 #endif
 
+#define IS_CLR (_MANAGED == 1) || (_M_CEE == 1)
+
 typedef uint8_t byte;
 typedef uint8_t uint8;
 typedef uint32_t uint32;
@@ -84,5 +88,46 @@ typedef int16_t int16;
 typedef unsigned int uint;
 
 #include "DirectXTexEnums.h"
+#include "../DirectXTex/DirectXTex/DirectXTex.h"
 
-EXPORT int ConvertFromDdsArray(byte* input, int len, byte* output, DirectXTexSharp::ESaveFileTypes filetype, bool vflip, bool hflip);
+EXPORT int ConvertAndSaveDdsImage(
+        byte* bytePtr,
+        int len,
+        const wchar_t* szFile,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        bool vflip,
+        bool hflip);
+EXPORT byte* ConvertFromDdsArray(
+        byte* bytePtr,
+        int len,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        bool vflip,
+        bool hflip);
+EXPORT byte* ConvertToDdsArray(
+        byte* bytePtr,
+        int len,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        DXGI_FORMAT format,
+        bool vflip,
+        bool hflip);
+
+namespace DirectXTexSharp::Format
+{
+    EXPORT size_t ComputeRowPitch(DXGI_FORMAT format, long width, long height);
+    EXPORT size_t ComputeSlicePitch(DXGI_FORMAT format, long width, long height);
+    EXPORT size_t BitsPerPixel(DXGI_FORMAT format);
+}
+
+namespace DirectXTexSharp::Metadata
+{
+    EXPORT DirectX::TexMetadata GetMetadataFromDDSFile(
+            const wchar_t* szFile,
+            DirectXTexSharp::DDSFLAGS flags);
+    EXPORT DirectX::TexMetadata GetMetadataFromTGAFile(
+            const wchar_t* szFile,
+            DirectXTexSharp::TGA_FLAGS flags);
+    EXPORT DirectX::TexMetadata GetMetadataFromDDSMemory(
+            byte* pSource,
+            int size,
+            DirectXTexSharp::DDSFLAGS flags);
+}

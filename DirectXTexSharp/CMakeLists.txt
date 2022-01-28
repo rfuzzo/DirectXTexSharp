@@ -5,7 +5,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/CMake")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/CMake")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/CMake")
 
-# set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 # disable on win build
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
@@ -62,8 +62,11 @@ endif()
 
 add_library(texconv SHARED
         DirectXTexEnums.h
-        texconv_lib.h
-        texconv_lib.cpp
+        texconv.h
+        # texconv_lib.cpp
+        Texconv.cpp
+        Format.cpp
+        Metadata.cpp
         ${LIBRARY_HEADERS}
         ${LIBRARY_SOURCES})
 # add_library(texconv_static STATIC ${SOURCE})
