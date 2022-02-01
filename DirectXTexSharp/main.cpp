@@ -33,7 +33,18 @@ int main() {
     int input_size;
     byte *input = load_file(curfile, &input_size);
 
-    Blob blob;
+//    auto buffer_size = 1273148;
+//    byte* buffer = new byte[buffer_size];
+//    auto len = ConvertToDdsArray(
+//            input,
+//            input_size,
+//            buffer,
+//            buffer_size,
+//            DirectXTexSharp::ESaveFileTypes::TGA,
+//            DXGI_FORMAT_UNKNOWN,
+//            false, false);
+
+    DirectX::Blob blob;
     auto hr = ConvertToDds(input, input_size, blob,
                            DirectXTexSharp::ESaveFileTypes::TGA,DXGI_FORMAT_UNKNOWN,
                            false, false);
@@ -42,9 +53,9 @@ int main() {
         return 1;
     }
 
-    auto len = blob.m_size;
+    auto len = blob.GetBufferSize();
     //auto buffer = blob.GetBufferPointer();
-    auto buffer =  static_cast<byte*>(blob.m_buffer);
+    auto buffer =  static_cast<byte*>(blob.GetBufferPointer());
 
     const char *destfile = R"(E:\GitHub\DirectXTexSharp\DirectXTexSharp\test_out.dds)";
     FILE *f = fopen(destfile, "wb");
