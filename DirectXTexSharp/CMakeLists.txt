@@ -28,6 +28,13 @@ add_cxx_compiler_flags(-pedantic -fno-permissive -pedantic-errors -Wall -Wextra 
 
 include_directories(.)
 
+
+# DXTEX options
+
+option(BC_USE_OPENMP "Build with OpenMP support" ON)
+
+
+
 set(LIBRARY_HEADERS
         ../DirectXTex/DirectXTex/DirectXTex.h
         ../DirectXTex/DirectXTex/DirectXTex.inl)
@@ -70,4 +77,26 @@ add_library(texconv SHARED
         ${LIBRARY_HEADERS}
         ${LIBRARY_SOURCES})
 # add_library(texconv_static STATIC ${SOURCE})
-# add_executable(main ${SOURCE} main.cpp)
+add_executable(main
+        DirectXTexEnums.h
+        texconv.h
+        # texconv_lib.cpp
+        Texconv.cpp
+        Format.cpp
+        Metadata.cpp
+        ${LIBRARY_HEADERS}
+        ${LIBRARY_SOURCES} main.cpp)
+
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    target_compile_options(${PROJECT_NAME} PRIVATE /permissive- /JMC- /Zc:__cplusplus)
+
+
+    if(BC_USE_OPENMP)
+        target_compile_options(${PROJECT_NAME} PRIVATE /openmp /Zc:twoPhase-)
+        target_compile_options(texconv PRIVATE /openmp /Zc:twoPhase-)
+        target_compile_options(main PRIVATE /openmp /Zc:twoPhase-)
+    endif()
+
+
+endif()

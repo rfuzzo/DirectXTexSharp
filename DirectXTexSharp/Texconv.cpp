@@ -327,7 +327,7 @@ std::unique_ptr<DirectX::ScratchImage> ConvertFromDdsMemory(
 
 DirectX::Blob ConvertToDdsMemory(
         byte* bytePtr,
-        int len,
+        size_t len,
         DirectXTexSharp::ESaveFileTypes filetype,
         DXGI_FORMAT format,
         bool vflip,
@@ -339,7 +339,7 @@ DirectX::Blob ConvertToDdsMemory(
     DirectX::TEX_FILTER_FLAGS dwFilter = DirectX::TEX_FILTER_DEFAULT;
     DirectX::TEX_FILTER_FLAGS dwSRGB = DirectX::TEX_FILTER_DEFAULT;
     DirectX::TEX_FILTER_FLAGS dwConvert = DirectX::TEX_FILTER_DEFAULT;
-    DirectX::TEX_COMPRESS_FLAGS dwCompress = DirectX::TEX_COMPRESS_PARALLEL; //TEX_COMPRESS_PARALLEL, TEX_COMPRESS_DEFAULT
+    DirectX::TEX_COMPRESS_FLAGS dwCompress = DirectX::TEX_COMPRESS_DEFAULT; //TEX_COMPRESS_PARALLEL, TEX_COMPRESS_DEFAULT
     DirectX::TEX_FILTER_FLAGS dwFilterOpts = DirectX::TEX_FILTER_DEFAULT;
     float alphaThreshold = DirectX::TEX_THRESHOLD_DEFAULT;
     bool preserveAlphaCoverage = false;
@@ -773,9 +773,9 @@ DirectX::Blob ConvertToDdsMemory(
 
                 DirectX::TEX_COMPRESS_FLAGS cflags = dwCompress;
 #ifdef _OPENMP
-                if (!(dwOptions & (uint64_t(1) << OPT_FORCE_SINGLEPROC)))
+                //if (!(dwOptions & (uint64_t(1) << OPT_FORCE_SINGLEPROC)))
                 {
-                    cflags |= TEX_COMPRESS_PARALLEL;
+                    cflags |= DirectX::TEX_COMPRESS_PARALLEL;
                 }
 #endif
 
@@ -1006,16 +1006,14 @@ int ConvertAndSaveDdsImage(
     return 0;
 }
 
-#if (_MANAGED == 1) || (_M_CEE == 1)
-array<System::Byte>^ ConvertFromDdsArray(
-#else
-byte* ConvertFromDdsArray(
-#endif
-    byte* bytePtr, 
-    int len, 
-    DirectXTexSharp::ESaveFileTypes filetype, 
-    bool vflip, 
-    bool hflip)
+size_t ConvertFromDdsArray(
+        byte* bytePtr,
+        int len,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        byte* outBuffer,
+        //int outLen,
+        bool vflip,
+        bool hflip)
 {
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
@@ -1112,53 +1110,162 @@ byte* ConvertFromDdsArray(
         throw_or_clr(hr);
     }
 
-    // copy buffer
-
-    auto buffer = static_cast<uint8_t*>(blob.GetBufferPointer());
-#if (_MANAGED == 1) || (_M_CEE == 1)
+    //copy buffer
     auto len_buffer = blob.GetBufferSize();
-    array<byte>^ _Data = gcnew array<byte>(int(len_buffer));
-
-    for (int i = 0; i < _Data->Length; ++i)
-        _Data[i] = buffer[i];
-
-    return _Data;
-#else
-    return buffer;
-#endif
+//    auto buffer =  static_cast<byte*>(blob.GetBufferPointer());
+//    auto vec =  std::vector<byte>(buffer, buffer+len_buffer);
+//    blob.Release();
+    return len_buffer;
 }
 
-#if (_MANAGED == 1) || (_M_CEE == 1)
-array<System::Byte>^ ConvertToDdsArray(
-#else
-byte* ConvertToDdsArray(
-#endif
-
-    byte* bytePtr, 
-    int len, 
-    DirectXTexSharp::ESaveFileTypes filetype, 
+size_t ConvertToDdsArray(
+    byte* inBuff,
+    size_t inBuff_len,
+    byte* outBuff,
+    size_t outBuff_len,
+    DirectXTexSharp::ESaveFileTypes filetype,
     DXGI_FORMAT format,
-    bool vflip, 
+    bool vflip,
     bool hflip)
 {
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
-    auto blob = ConvertToDdsMemory(bytePtr, len, filetype, static_cast<__dxgiformat_h__::DXGI_FORMAT> (format), vflip, hflip);
+    auto blob = ConvertToDdsMemory(inBuff, inBuff_len, filetype, static_cast<__dxgiformat_h__::DXGI_FORMAT> (format), vflip, hflip);
 
-    //copy buffer
-    auto buffer = static_cast<uint8_t*>(blob.GetBufferPointer());
-#if (_MANAGED == 1) || (_M_CEE == 1)
     auto len_buffer = blob.GetBufferSize();
-    array<byte>^ _Data = gcnew array<byte>(int(len_buffer));
+    auto buffer =  static_cast<byte*>(blob.GetBufferPointer());
 
-    for (int i = 0; i < _Data->Length; ++i)
-        _Data[i] = buffer[i];
+    if (outBuff == nullptr)
+        return 0;
 
-    return _Data;
-#else
-    return buffer;
-#endif
+    if (outBuff_len < len_buffer)
+        return 0;
+
+    memcpy(outBuff, buffer, len_buffer);
+
+    blob.Release();
+    return len_buffer;
 }
 
+EXPORT int ConvertToDds(
+        byte* inBuff,
+        size_t inBuff_len,
+        DirectX::Blob& blob,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        DXGI_FORMAT format,
+        bool vflip,
+        bool hflip)
+{
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
+    blob = ConvertToDdsMemory(inBuff, inBuff_len, filetype, static_cast<__dxgiformat_h__::DXGI_FORMAT> (format), vflip, hflip);
 
+//    auto len_buffer = blob.GetBufferSize();
+//    auto buffer =  static_cast<byte*>(blob.GetBufferPointer());
+
+    return 0;
+}
+
+EXPORT size_t GetRequiredSizeDDS( byte* bytePtr, size_t len, DirectX::DDS_FLAGS flags)
+{
+    // load image from other formats
+    DirectX::TexMetadata info;
+    std::unique_ptr<DirectX::ScratchImage> image(new (std::nothrow) DirectX::ScratchImage);
+    auto hr = DirectX::LoadFromDDSMemory(bytePtr, len, flags, &info, *image);
+
+    if (FAILED(hr))
+        return hr;
+
+    auto nimages = image->GetImageCount();
+    auto images = image->GetImages();
+
+    if (!images || (nimages == 0))
+        return E_INVALIDARG;
+
+    // Determine memory required
+    size_t required = 0;
+//    HRESULT hr = _EncodeDDSHeader(metadata, flags, nullptr, 0, required);
+//    if (FAILED(hr))
+//        return hr;
+
+    bool fastpath = true;
+
+    for (size_t i = 0; i < nimages; ++i)
+    {
+        if (!images[i].pixels)
+            return E_POINTER;
+
+        if (images[i].format != info.format)
+            return E_FAIL;
+
+        size_t ddsRowPitch, ddsSlicePitch;
+        hr = ComputePitch(info.format, images[i].width, images[i].height, ddsRowPitch, ddsSlicePitch, DirectX::CP_FLAGS_NONE);
+        if (FAILED(hr))
+            return hr;
+
+        assert(images[i].rowPitch > 0);
+        assert(images[i].slicePitch > 0);
+
+        if ((images[i].rowPitch != ddsRowPitch) || (images[i].slicePitch != ddsSlicePitch))
+        {
+            fastpath = false;
+        }
+
+        required += ddsSlicePitch;
+    }
+
+    assert(required > 0);
+    return required;
+}
+
+EXPORT size_t GetRequiredSizeTGA( byte* bytePtr, size_t len, DirectX::TGA_FLAGS flags)
+{
+    // load image from other formats
+    DirectX::TexMetadata info;
+    std::unique_ptr<DirectX::ScratchImage> image(new (std::nothrow) DirectX::ScratchImage);
+    auto hr = DirectX::LoadFromTGAMemory(bytePtr, len, flags, &info, *image);
+
+    if (FAILED(hr))
+        return hr;
+
+    auto nimages = image->GetImageCount();
+    auto images = image->GetImages();
+
+    if (!images || (nimages == 0))
+        return E_INVALIDARG;
+
+    // Determine memory required
+    size_t required = 0;
+//    HRESULT hr = _EncodeDDSHeader(metadata, flags, nullptr, 0, required);
+//    if (FAILED(hr))
+//        return hr;
+
+    bool fastpath = true;
+
+    for (size_t i = 0; i < nimages; ++i)
+    {
+        if (!images[i].pixels)
+            return E_POINTER;
+
+        if (images[i].format != info.format)
+            return E_FAIL;
+
+        size_t ddsRowPitch, ddsSlicePitch;
+        hr = ComputePitch(info.format, images[i].width, images[i].height, ddsRowPitch, ddsSlicePitch, DirectX::CP_FLAGS_NONE);
+        if (FAILED(hr))
+            return hr;
+
+        assert(images[i].rowPitch > 0);
+        assert(images[i].slicePitch > 0);
+
+        if ((images[i].rowPitch != ddsRowPitch) || (images[i].slicePitch != ddsSlicePitch))
+        {
+            fastpath = false;
+        }
+
+        required += ddsSlicePitch;
+    }
+
+    assert(required > 0);
+    return required;
+}

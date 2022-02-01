@@ -62,7 +62,7 @@
 
 #if defined(_MSC_VER)
 //  Microsoft
-#define EXPORT extern "C" __declspec(dllexport)
+#define EXPORT extern "C" __declspec(dllexport) //
 #define IMPORT __declspec(dllimport)
 #elif defined(__GNUC__)
 //  GCC
@@ -90,24 +90,42 @@ typedef unsigned int uint;
 #include "DirectXTexEnums.h"
 #include "../DirectXTex/DirectXTex/DirectXTex.h"
 
+//EXPORT size_t GetRequiredSizeDDS(byte* bytePtr, size_t len, DirectX::DDS_FLAGS flags);
+//EXPORT size_t GetRequiredSizeTGA(byte* bytePtr, size_t len, DirectX::TGA_FLAGS flags);
+
+
+EXPORT size_t ConvertFromDdsArray(
+        byte* bytePtr,
+        int len,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        byte* outBuffer,
+        bool vflip,
+        bool hflip);
+
+EXPORT size_t ConvertToDdsArray(
+        byte* inBuff,
+        size_t inBuff_len,
+        byte* outBuff,
+        size_t outBuff_len,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        DXGI_FORMAT format,
+        bool vflip,
+        bool hflip);
+
+EXPORT int ConvertToDds(
+        byte* inBuff,
+        size_t inBuff_len,
+        DirectX::Blob& blob,
+        DirectXTexSharp::ESaveFileTypes filetype,
+        DXGI_FORMAT format,
+        bool vflip,
+        bool hflip);
+
 EXPORT int ConvertAndSaveDdsImage(
         byte* bytePtr,
         int len,
         const wchar_t* szFile,
         DirectXTexSharp::ESaveFileTypes filetype,
-        bool vflip,
-        bool hflip);
-EXPORT byte* ConvertFromDdsArray(
-        byte* bytePtr,
-        int len,
-        DirectXTexSharp::ESaveFileTypes filetype,
-        bool vflip,
-        bool hflip);
-EXPORT byte* ConvertToDdsArray(
-        byte* bytePtr,
-        int len,
-        DirectXTexSharp::ESaveFileTypes filetype,
-        DXGI_FORMAT format,
         bool vflip,
         bool hflip);
 
