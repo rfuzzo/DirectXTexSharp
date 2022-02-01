@@ -96,8 +96,4 @@
     <PackageReference Include="coverlet.collector" Version="3.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp_2022.vcxproj" />
-  </ItemGroup>
-
 </Project>

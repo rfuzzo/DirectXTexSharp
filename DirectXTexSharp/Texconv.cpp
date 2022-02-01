@@ -92,6 +92,7 @@ namespace
     }
 }
 
+
 inline void throw_or_clr(HRESULT hr)
 {
     if (FAILED(hr))
@@ -1006,12 +1007,11 @@ int ConvertAndSaveDdsImage(
     return 0;
 }
 
-size_t ConvertFromDdsArray(
+EXPORT size_t ConvertFromDds(
         byte* bytePtr,
         int len,
+        Blob& blob,
         DirectXTexSharp::ESaveFileTypes filetype,
-        byte* outBuffer,
-        //int outLen,
         bool vflip,
         bool hflip)
 {
@@ -1021,7 +1021,7 @@ size_t ConvertFromDdsArray(
     auto img = image->GetImage(0, 0, 0);
     assert(img);
 
-    DirectX::Blob blob;
+    DirectX::Blob dblob;
 
     switch (filetype)
     {
@@ -1029,9 +1029,9 @@ size_t ConvertFromDdsArray(
     {
             
         hr = DirectX::SaveToTGAMemory(
-            img[0],
-            DirectX::TGA_FLAGS_NONE,
-            blob,
+                img[0],
+                DirectX::TGA_FLAGS_NONE,
+                dblob,
             /*(dwOptions & (uint64_t(1) << OPT_TGA20)) ? &info :*/ nullptr);
         break;
     }
@@ -1047,13 +1047,13 @@ size_t ConvertFromDdsArray(
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICMemory(
-            img,
-            nimages,
-            DirectX::WIC_FLAGS_NONE,
-            DirectX::GetWICCodec(codec),
-            blob,
-            nullptr,
-            GetWicPropsJpg);
+                img,
+                nimages,
+                DirectX::WIC_FLAGS_NONE,
+                DirectX::GetWICCodec(codec),
+                dblob,
+                nullptr,
+                GetWicPropsJpg);
         break;
     }
     case DirectXTexSharp::ESaveFileTypes::TIFF:
@@ -1062,13 +1062,13 @@ size_t ConvertFromDdsArray(
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICMemory(
-            img,
-            nimages,
-            DirectX::WIC_FLAGS_NONE,
-            DirectX::GetWICCodec(codec),
-            blob,
-            nullptr,
-            GetWicPropsTiff);
+                img,
+                nimages,
+                DirectX::WIC_FLAGS_NONE,
+                DirectX::GetWICCodec(codec),
+                dblob,
+                nullptr,
+                GetWicPropsTiff);
         break;
     }
     case DirectXTexSharp::ESaveFileTypes::PNG:
@@ -1077,13 +1077,13 @@ size_t ConvertFromDdsArray(
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICMemory(
-            img,
-            nimages,
-            DirectX::WIC_FLAGS_NONE,
-            DirectX::GetWICCodec(codec),
-            blob,
-            nullptr,
-            nullptr);
+                img,
+                nimages,
+                DirectX::WIC_FLAGS_NONE,
+                DirectX::GetWICCodec(codec),
+                dblob,
+                nullptr,
+                nullptr);
         break;
     }
     case DirectXTexSharp::ESaveFileTypes::BMP:
@@ -1092,13 +1092,13 @@ size_t ConvertFromDdsArray(
         size_t nimages = 1;
 
         hr = DirectX::SaveToWICMemory(
-            img,
-            nimages,
-            DirectX::WIC_FLAGS_NONE,
-            DirectX::GetWICCodec(codec),
-            blob,
-            nullptr,
-            nullptr);
+                img,
+                nimages,
+                DirectX::WIC_FLAGS_NONE,
+                DirectX::GetWICCodec(codec),
+                dblob,
+                nullptr,
+                nullptr);
         break;
     }
 
@@ -1110,47 +1110,20 @@ size_t ConvertFromDdsArray(
         throw_or_clr(hr);
     }
 
-    //copy buffer
-    auto len_buffer = blob.GetBufferSize();
-//    auto buffer =  static_cast<byte*>(blob.GetBufferPointer());
-//    auto vec =  std::vector<byte>(buffer, buffer+len_buffer);
-//    blob.Release();
+    auto len_buffer = dblob.GetBufferSize();
+
+    blob.m_buffer = new byte[len_buffer];
+    blob.m_size = len_buffer;
+    memcpy(blob.m_buffer, dblob.GetBufferPointer(), len_buffer);
+
+    dblob.Release();
     return len_buffer;
 }
 
-size_t ConvertToDdsArray(
-    byte* inBuff,
-    size_t inBuff_len,
-    byte* outBuff,
-    size_t outBuff_len,
-    DirectXTexSharp::ESaveFileTypes filetype,
-    DXGI_FORMAT format,
-    bool vflip,
-    bool hflip)
-{
-    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-
-    auto blob = ConvertToDdsMemory(inBuff, inBuff_len, filetype, static_cast<__dxgiformat_h__::DXGI_FORMAT> (format), vflip, hflip);
-
-    auto len_buffer = blob.GetBufferSize();
-    auto buffer =  static_cast<byte*>(blob.GetBufferPointer());
-
-    if (outBuff == nullptr)
-        return 0;
-
-    if (outBuff_len < len_buffer)
-        return 0;
-
-    memcpy(outBuff, buffer, len_buffer);
-
-    blob.Release();
-    return len_buffer;
-}
-
-EXPORT int ConvertToDds(
+EXPORT size_t ConvertToDds(
         byte* inBuff,
-        size_t inBuff_len,
-        DirectX::Blob& blob,
+        int inBuff_len,
+        Blob& blob,
         DirectXTexSharp::ESaveFileTypes filetype,
         DXGI_FORMAT format,
         bool vflip,
@@ -1158,114 +1131,14 @@ EXPORT int ConvertToDds(
 {
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
-    blob = ConvertToDdsMemory(inBuff, inBuff_len, filetype, static_cast<__dxgiformat_h__::DXGI_FORMAT> (format), vflip, hflip);
+    auto dblob = ConvertToDdsMemory(inBuff, inBuff_len, filetype, static_cast<__dxgiformat_h__::DXGI_FORMAT> (format), vflip, hflip);
 
-//    auto len_buffer = blob.GetBufferSize();
-//    auto buffer =  static_cast<byte*>(blob.GetBufferPointer());
+    auto len_buffer = dblob.GetBufferSize();
 
-    return 0;
-}
+    blob.m_buffer = new byte[len_buffer];
+    blob.m_size = len_buffer;
+    memcpy(blob.m_buffer, dblob.GetBufferPointer(), len_buffer);
 
-EXPORT size_t GetRequiredSizeDDS( byte* bytePtr, size_t len, DirectX::DDS_FLAGS flags)
-{
-    // load image from other formats
-    DirectX::TexMetadata info;
-    std::unique_ptr<DirectX::ScratchImage> image(new (std::nothrow) DirectX::ScratchImage);
-    auto hr = DirectX::LoadFromDDSMemory(bytePtr, len, flags, &info, *image);
-
-    if (FAILED(hr))
-        return hr;
-
-    auto nimages = image->GetImageCount();
-    auto images = image->GetImages();
-
-    if (!images || (nimages == 0))
-        return E_INVALIDARG;
-
-    // Determine memory required
-    size_t required = 0;
-//    HRESULT hr = _EncodeDDSHeader(metadata, flags, nullptr, 0, required);
-//    if (FAILED(hr))
-//        return hr;
-
-    bool fastpath = true;
-
-    for (size_t i = 0; i < nimages; ++i)
-    {
-        if (!images[i].pixels)
-            return E_POINTER;
-
-        if (images[i].format != info.format)
-            return E_FAIL;
-
-        size_t ddsRowPitch, ddsSlicePitch;
-        hr = ComputePitch(info.format, images[i].width, images[i].height, ddsRowPitch, ddsSlicePitch, DirectX::CP_FLAGS_NONE);
-        if (FAILED(hr))
-            return hr;
-
-        assert(images[i].rowPitch > 0);
-        assert(images[i].slicePitch > 0);
-
-        if ((images[i].rowPitch != ddsRowPitch) || (images[i].slicePitch != ddsSlicePitch))
-        {
-            fastpath = false;
-        }
-
-        required += ddsSlicePitch;
-    }
-
-    assert(required > 0);
-    return required;
-}
-
-EXPORT size_t GetRequiredSizeTGA( byte* bytePtr, size_t len, DirectX::TGA_FLAGS flags)
-{
-    // load image from other formats
-    DirectX::TexMetadata info;
-    std::unique_ptr<DirectX::ScratchImage> image(new (std::nothrow) DirectX::ScratchImage);
-    auto hr = DirectX::LoadFromTGAMemory(bytePtr, len, flags, &info, *image);
-
-    if (FAILED(hr))
-        return hr;
-
-    auto nimages = image->GetImageCount();
-    auto images = image->GetImages();
-
-    if (!images || (nimages == 0))
-        return E_INVALIDARG;
-
-    // Determine memory required
-    size_t required = 0;
-//    HRESULT hr = _EncodeDDSHeader(metadata, flags, nullptr, 0, required);
-//    if (FAILED(hr))
-//        return hr;
-
-    bool fastpath = true;
-
-    for (size_t i = 0; i < nimages; ++i)
-    {
-        if (!images[i].pixels)
-            return E_POINTER;
-
-        if (images[i].format != info.format)
-            return E_FAIL;
-
-        size_t ddsRowPitch, ddsSlicePitch;
-        hr = ComputePitch(info.format, images[i].width, images[i].height, ddsRowPitch, ddsSlicePitch, DirectX::CP_FLAGS_NONE);
-        if (FAILED(hr))
-            return hr;
-
-        assert(images[i].rowPitch > 0);
-        assert(images[i].slicePitch > 0);
-
-        if ((images[i].rowPitch != ddsRowPitch) || (images[i].slicePitch != ddsSlicePitch))
-        {
-            fastpath = false;
-        }
-
-        required += ddsSlicePitch;
-    }
-
-    assert(required > 0);
-    return required;
+    dblob.Release();
+    return len_buffer;
 }

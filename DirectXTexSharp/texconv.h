@@ -90,32 +90,24 @@ typedef unsigned int uint;
 #include "DirectXTexEnums.h"
 #include "../DirectXTex/DirectXTex/DirectXTex.h"
 
-//EXPORT size_t GetRequiredSizeDDS(byte* bytePtr, size_t len, DirectX::DDS_FLAGS flags);
-//EXPORT size_t GetRequiredSizeTGA(byte* bytePtr, size_t len, DirectX::TGA_FLAGS flags);
+struct Blob
+{
+    void*   m_buffer;
+    size_t  m_size;
+};
 
-
-EXPORT size_t ConvertFromDdsArray(
+EXPORT size_t ConvertFromDds(
         byte* bytePtr,
         int len,
+        Blob& blob,
         DirectXTexSharp::ESaveFileTypes filetype,
-        byte* outBuffer,
         bool vflip,
         bool hflip);
 
-EXPORT size_t ConvertToDdsArray(
+EXPORT size_t ConvertToDds(
         byte* inBuff,
-        size_t inBuff_len,
-        byte* outBuff,
-        size_t outBuff_len,
-        DirectXTexSharp::ESaveFileTypes filetype,
-        DXGI_FORMAT format,
-        bool vflip,
-        bool hflip);
-
-EXPORT int ConvertToDds(
-        byte* inBuff,
-        size_t inBuff_len,
-        DirectX::Blob& blob,
+        int inBuff_len,
+        Blob& blob,
         DirectXTexSharp::ESaveFileTypes filetype,
         DXGI_FORMAT format,
         bool vflip,
