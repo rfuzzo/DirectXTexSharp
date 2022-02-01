@@ -360,11 +360,7 @@ std::unique_ptr<DirectX::ScratchImage> DirectXTexSharp::Texconv::ConvertFromDdsM
     if (FAILED(hr))
     {
         wprintf(L" FAILED (%08X%ls)\n", static_cast<unsigned int>(hr), L"hr");
-#if (_MANAGED == 1) || (_M_CEE == 1)
         System::Runtime::InteropServices::Marshal::ThrowExceptionForHR(hr);
-#else
-        throw _com_error(hr);
-#endif
     }
 
     DXGI_FORMAT tformat = (format == DXGI_FORMAT_UNKNOWN) ? info.format : format;

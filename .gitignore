@@ -23,9 +23,3 @@ ipch
 .vs/
 *.vcxproj.user
 obj/
-
-# clion
-.idea/
-
-# cmake
-DirectXTexSharp/cmake-build-debug/
