@@ -6,7 +6,7 @@
 #include <wincodec.h>
 #include <comdef.h>  // Declares _com_error
 
-#include "texconv.h"
+#include "texconv_lib.h"
 #include "../DirectXTex/DirectXTex/DirectXTex.h"
 
 inline void throw_or_clr(HRESULT hr)
@@ -319,9 +319,10 @@ std::unique_ptr<DirectX::ScratchImage> ConvertFromDdsMemory(
 
 
 
-byte* ConvertFromDdsArray(
+int ConvertFromDdsArray(
         byte* input,
         int len,
+        byte* output,
         DirectXTexSharp::ESaveFileTypes filetype,
         bool vflip,
         bool hflip)
@@ -423,13 +424,14 @@ byte* ConvertFromDdsArray(
 
     // copy buffer
     auto len_buffer = blob.GetBufferSize();
-    return static_cast<uint8_t*>(blob.GetBufferPointer());
+    output = static_cast<uint8_t*>(blob.GetBufferPointer());
 //    array<byte>^ _Data = gcnew array<byte>(int(len_buffer));
 //
 //    for (int i = 0; i < _Data->Length; ++i)
 //        _Data[i] = buffer[i];
 //
 //    return _Data;
+    return 0;
 }
 
 
